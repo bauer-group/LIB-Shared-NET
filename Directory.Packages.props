@@ -29,7 +29,7 @@
     <PackageVersion Include="SharpZipLib" Version="1.4.2" />
     <PackageVersion Include="HtmlAgilityPack" Version="1.12.4" />
     <!-- HTTP / API -->
-    <PackageVersion Include="RestSharp" Version="113.1.0" />
+    <PackageVersion Include="RestSharp" Version="114.0.0" />
     <!-- Cloud Services -->
     <PackageVersion Include="CloudinaryDotNet" Version="1.28.0" />
     <!-- Reactive Extensions -->
