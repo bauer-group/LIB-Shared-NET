@@ -52,7 +52,7 @@
     <PackageVersion Include="CefSharp.OffScreen.NETCore" Version="146.0.70" />
     <PackageVersion Include="CefSharp.Wpf.NETCore" Version="147.0.100" />
     <!-- Reporting (Stimulsoft) - Version bleibt wegen Lizenz! -->
-    <PackageVersion Include="Stimulsoft.Dashboards.Win" Version="2022.1.2" />
+    <PackageVersion Include="Stimulsoft.Dashboards.Win" Version="2026.2.2" />
     <PackageVersion Include="Stimulsoft.Reports.Wpf" Version="2022.1.2" />
     <!-- Polyfills for netstandard2.0 / net8.0 -->
     <PackageVersion Include="PolySharp" Version="1.15.0" />
