@@ -6,7 +6,7 @@
     <!-- Build & Source Link -->
     <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="10.0.300" />
     <!-- Core / Utilities -->
-    <PackageVersion Include="NLog" Version="6.1.2" />
+    <PackageVersion Include="NLog" Version="6.1.3" />
     <PackageVersion Include="NLog.Extensions.Logging" Version="6.1.2" />
     <PackageVersion Include="NLog.WindowsEventLog" Version="6.1.2" />
     <!-- NLog 6.0 separate target packages -->
