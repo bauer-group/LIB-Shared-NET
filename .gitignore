@@ -5,6 +5,7 @@
 # For more information: https://git-scm.com/docs/gitignore
 # =============================================================================
 
+
 # =============================================================================
 # BUILD OUTPUT
 # =============================================================================
@@ -20,20 +21,23 @@ x86/
 [Aa][Rr][Mm]/
 [Aa][Rr][Mm]64/
 bld/
-[Bb]uild/
 [Oo]ut/
+# Note: NO standalone [Bb]uild/ pattern — we have a real build/ folder
+# at repo root holding the SNK signing key and build/README.md. The
+# [Bb]in/ + [Oo]bj/ patterns already catch all build output.
+
+# Centralized artifacts/ (BaseOutputPath in Directory.Build.props)
+artifacts/
 
 # =============================================================================
 # VISUAL STUDIO
 # =============================================================================
-# User-specific Visual Studio files
 .vs/
 *.user
 *.userosscache
 *.suo
 *.sln.docstates
 
-# Visual Studio cache/options directory
 .vs/**/DesignTimeBuild/
 .vs/**/ContentModel/
 .vs/**/.userprefs
@@ -80,21 +84,18 @@ PublishScripts/
 # NuGet packages directory (restored during build)
 [Pp]ackages/
 *.nupkg
-
-# NuGet Symbol packages
 *.snupkg
 
 # NuGet package cache
 project.lock.json
 project.fragment.lock.json
-artifacts/
 
 # NuGet config files (may contain private feed credentials)
 # Uncomment if you use private feeds with credentials in nuget.config
 # nuget.config
 
 # =============================================================================
-# .NET CORE / .NET 5+ SPECIFIC
+# .NET SPECIFIC
 # =============================================================================
 # Global packages folder
 !.packages/
@@ -112,14 +113,12 @@ publish/
 # =============================================================================
 # TEST RESULTS
 # =============================================================================
-# Test results and coverage reports
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*
 *.trx
 *.coveragexml
 coverage*/
 *.coverage
-*.coveragexml
 TestResult.xml
 
 # NCover
@@ -140,6 +139,10 @@ StyleCopReport.xml
 *.CodeAnalysisLog.xml
 *.lastcodeanalysissucceeded
 
+# Static analyzer reports
+.sarif/
+*.sarif
+
 # =============================================================================
 # RESHARPER
 # =============================================================================
@@ -150,7 +153,7 @@ _ReSharper*/
 # =============================================================================
 # SECRETS & SENSITIVE DATA
 # =============================================================================
-# Local environment files (may contain API keys, connection strings)
+# Local environment files
 *.local
 *.local.json
 .env
@@ -167,7 +170,18 @@ appsettings.Local.json
 *.pfx
 *.p12
 *.cer
-!*.snk
+
+# Strong-name keys — NEVER commit any SNK to the repository. The build/
+# BAUERGROUP.Shared.snk lives only locally (developer machines) or in CI
+# (materialized from the DOTNET_SIGNKEY_BASE64 GitHub secret at build time).
+# No exceptions, no negation rules. A strong-name key in a public repo
+# undermines assembly-identity trust for every downstream consumer that
+# strong-name-links against our assemblies.
+*.snk
+*.pfx
+*.p12
+*.cer
+*.key
 
 # =============================================================================
 # TEMPORARY FILES
@@ -187,10 +201,12 @@ $RECYCLE.BIN/
 # Linux
 *~
 
-# Temporary files
+# Temporary files & backup files
 *.tmp
 *.temp
 *.bak
+*.orig
+*.rej
 *.swp
 *.swo
 *~.nib
@@ -210,7 +226,7 @@ npm-debug.log*
 # =============================================================================
 # DATABASE FILES
 # =============================================================================
-# SQL Server files
+# SQL Server
 *.mdf
 *.ldf
 *.ndf
@@ -221,7 +237,7 @@ npm-debug.log*
 *.sqlite
 *.sqlite3
 
-# LiteDB (used in this project)
+# LiteDB (used via Plattform.Data)
 *.litedb
 
 # =============================================================================
