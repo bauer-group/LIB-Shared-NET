@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="RestSharp" />
+    <PackageReference Include="System.Collections.Immutable" />
   </ItemGroup>
 
   <ItemGroup>
