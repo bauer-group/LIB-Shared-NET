@@ -18,7 +18,7 @@
     <!-- Assembly Info -->
     <Authors>BAUER GROUP Development Team</Authors>
     <Company>BAUER GROUP</Company>
-    <Copyright>Copyright ©2003-2026 BAUER GROUP</Copyright>
+    <Copyright>Copyright © 2003 - $([System.DateTime]::UtcNow.ToString("yyyy")) BAUER GROUP</Copyright>
     <Product>BAUER GROUP Shared Components</Product>
     <Description>Library for BAUER GROUP Shared Components for .NET. This Component is a Part of our Enterprise Business Framework.</Description>
     <!-- NuGet Package Metadata -->
