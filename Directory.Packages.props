@@ -31,7 +31,7 @@
     <!-- HTTP / API -->
     <PackageVersion Include="RestSharp" Version="114.0.0" />
     <!-- Cloud Services -->
-    <PackageVersion Include="CloudinaryDotNet" Version="1.29.1" />
+    <PackageVersion Include="CloudinaryDotNet" Version="1.29.2" />
     <!-- Reactive Extensions -->
     <PackageVersion Include="System.Reactive" Version="6.1.0" />
     <PackageVersion Include="ReactiveUI" Version="22.3.1" />
