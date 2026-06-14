@@ -2,7 +2,7 @@
 
 ## Technische Spezifikation v1.0
 
-**Projekt:** BAUERGROUP.Shared.Plattform
+**Projekt:** BAUERGROUP.Shared
 **Erstellt:** 2026-01-18
 **Status:** Konzept zur Umsetzung
 
@@ -1124,7 +1124,7 @@ jobs:
 ## 9. Projektstruktur
 
 ```
-BAUERGROUP.Shared.Plattform/
+BAUERGROUP.Shared/
 ├── src/                              # Bibliotheks-Quellcode
 ├── tests/                            # Tests
 ├── tools/

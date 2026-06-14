@@ -1,5 +1,5 @@
 # =============================================================================
-# Release Workflow - LIB-Shared-Plattform-NET
+# Release Workflow - LIB-Shared-NET
 # =============================================================================
 # Complete CI/CD workflow for the shared platform libraries using reusable
 # workflows from bauer-group/automation-templates:
@@ -33,7 +33,7 @@ on:
     paths:
       - "src/**"
       - "tests/**"
-      - "*.sln"
+      - "*.slnx"
       - "Directory.Build.props"
       - "Directory.Packages.props"
   workflow_dispatch:
@@ -59,7 +59,7 @@ jobs:
     name: 🔨 Build & Test
     uses: bauer-group/automation-templates/.github/workflows/dotnet-build.yml@main
     with:
-      project-path: "BAUERGROUP.Shared.Plattform.sln"
+      project-path: "BAUERGROUP.Shared.slnx"
       dotnet-version: "10.0.x"
       run-tests: true
       collect-coverage: true
@@ -94,7 +94,7 @@ jobs:
     if: needs.release.outputs.release-created == 'true'
     uses: bauer-group/automation-templates/.github/workflows/dotnet-publish-library.yml@main
     with:
-      project-path: "BAUERGROUP.Shared.Plattform.sln"
+      project-path: "BAUERGROUP.Shared.slnx"
       dotnet-version: "10.0.x"
 
       # Version from semantic-release
@@ -129,7 +129,7 @@ jobs:
     if: github.event_name == 'pull_request'
     uses: bauer-group/automation-templates/.github/workflows/dotnet-publish-library.yml@main
     with:
-      project-path: "BAUERGROUP.Shared.Plattform.sln"
+      project-path: "BAUERGROUP.Shared.slnx"
       dotnet-version: "10.0.x"
 
       # Preview version for PR

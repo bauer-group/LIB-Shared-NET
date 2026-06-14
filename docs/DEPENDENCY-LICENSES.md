@@ -192,6 +192,6 @@ Requires:
 
 ## Generated Information
 
-This analysis was generated for BAUERGROUP.Shared.Plattform as part of the .NET 10 migration.
+This analysis was generated for BAUERGROUP.Shared as part of the .NET 10 migration.
 
 For questions regarding licensing, contact the BAUER GROUP Development Team.

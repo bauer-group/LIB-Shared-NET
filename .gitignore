@@ -237,7 +237,7 @@ npm-debug.log*
 *.sqlite
 *.sqlite3
 
-# LiteDB (used via Plattform.Data)
+# LiteDB (used via Shared.Data)
 *.litedb
 
 # =============================================================================

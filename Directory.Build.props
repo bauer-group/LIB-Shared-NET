@@ -23,8 +23,8 @@
     <Description>Library for BAUER GROUP Shared Components for .NET. This Component is a Part of our Enterprise Business Framework.</Description>
     <!-- NuGet Package Metadata -->
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/bauer-group/LIB-Shared-Plattform-NET</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/bauer-group/LIB-Shared-Plattform-NET</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/bauer-group/LIB-Shared-NET</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/bauer-group/LIB-Shared-NET</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <!-- Assembly Signing -->

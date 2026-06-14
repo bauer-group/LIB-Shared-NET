@@ -1,5 +1,5 @@
 {
-  "dotnet.defaultSolution": "BAUERGROUP.Shared.Plattform.sln",
+  "dotnet.defaultSolution": "BAUERGROUP.Shared.slnx",
   "omnisharp.enableRoslynAnalyzers": true,
   "omnisharp.enableEditorConfigSupport": true,
   "editor.formatOnSave": true,

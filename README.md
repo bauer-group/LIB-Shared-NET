@@ -1,4 +1,4 @@
-# BAUER GROUP Shared Platform
+# BAUER GROUP Shared Libraries
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![.NET 10](https://img.shields.io/badge/.NET-10.0-512BD4)](https://dotnet.microsoft.com/)
@@ -12,7 +12,7 @@ A comprehensive multi-target .NET shared library platform providing essential bu
 
 ## Overview
 
-The BAUER GROUP Shared Platform is a modular, multi-project solution designed to accelerate development across the organization. It provides battle-tested implementations for common enterprise requirements including logging, data persistence, API integrations, cloud services, and desktop UI components.
+The BAUER GROUP Shared Libraries form a modular, multi-project solution designed to accelerate development across the organization. It provides battle-tested implementations for common enterprise requirements including logging, data persistence, API integrations, cloud services, and desktop UI components.
 
 ### Key Features
 
@@ -166,7 +166,7 @@ await WPFToolboxBrowser.MakeWebsiteScreenshot(
 ## Project Structure
 
 ```
-BAUERGROUP.Shared.Plattform/
+BAUERGROUP.Shared/
 ├── src/
 │   ├── BAUERGROUP.Shared.Core/                 # Core utilities & logging
 │   ├── BAUERGROUP.Shared.Data/                 # Data persistence layer
@@ -176,7 +176,7 @@ BAUERGROUP.Shared.Plattform/
 │   ├── BAUERGROUP.Shared.Desktop.Browser/      # Embedded browser
 │   └── BAUERGROUP.Shared.Desktop.Reporting/    # Reporting components
 ├── tests/
-│   └── BAUERGROUP.Shared.Plattform.Test/       # Unit tests
+│   └── BAUERGROUP.Shared.Test/                 # Unit tests
 ├── assets/                                     # Application icons
 ├── docs/
 │   ├── BUILD.md                                # Build documentation
@@ -187,7 +187,7 @@ BAUERGROUP.Shared.Plattform/
 ├── CHANGELOG.md                                # Version history
 ├── Directory.Build.props                       # Shared build configuration
 ├── Directory.Packages.props                    # Central package management
-└── BAUERGROUP.Shared.Plattform.sln             # Solution file
+└── BAUERGROUP.Shared.slnx                      # Solution file
 ```
 
 ---
@@ -203,8 +203,8 @@ BAUERGROUP.Shared.Plattform/
 
 ```bash
 # Clone the repository
-git clone https://github.com/bauergroup/BAUERGROUP.Shared.Plattform.git
-cd BAUERGROUP.Shared.Plattform
+git clone https://github.com/bauer-group/LIB-Shared-NET.git
+cd LIB-Shared-NET
 
 # Restore dependencies
 dotnet restore
@@ -306,7 +306,7 @@ Contributions are welcome! Please follow these guidelines:
 For questions or issues:
 
 - **Internal**: Contact BAUER GROUP Development Team
-- **GitHub Issues**: [Report an issue](https://github.com/bauergroup/BAUERGROUP.Shared.Plattform/issues)
+- **GitHub Issues**: [Report an issue](https://github.com/bauer-group/LIB-Shared-NET/issues)
 
 ---
 

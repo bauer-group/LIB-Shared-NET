@@ -1,0 +1,22 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/src/">
+    <Project Path="src/BAUERGROUP.Shared.API/BAUERGROUP.Shared.API.csproj" />
+    <Project Path="src/BAUERGROUP.Shared.Cloud/BAUERGROUP.Shared.Cloud.csproj" />
+    <Project Path="src/BAUERGROUP.Shared.Core/BAUERGROUP.Shared.Core.csproj" />
+    <Project Path="src/BAUERGROUP.Shared.Data/BAUERGROUP.Shared.Data.csproj" />
+    <Project Path="src/BAUERGROUP.Shared.Desktop.Browser/BAUERGROUP.Shared.Desktop.Browser.csproj">
+      <Platform Solution="*|x64" Project="x64" />
+      <Platform Solution="*|x86" Project="x86" />
+    </Project>
+    <Project Path="src/BAUERGROUP.Shared.Desktop.Reporting/BAUERGROUP.Shared.Desktop.Reporting.csproj" />
+    <Project Path="src/BAUERGROUP.Shared.Desktop/BAUERGROUP.Shared.Desktop.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/BAUERGROUP.Shared.Test/BAUERGROUP.Shared.Test.csproj" />
+  </Folder>
+</Solution>

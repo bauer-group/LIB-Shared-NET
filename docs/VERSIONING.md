@@ -77,4 +77,4 @@ dotnet add package BAUERGROUP.Shared.Core
 
 ## Release Notes
 
-See [GitHub Releases](https://github.com/bauer-group/LIB-Shared-Plattform-NET/releases) for detailed changelogs.
+See [GitHub Releases](https://github.com/bauer-group/LIB-Shared-NET/releases) for detailed changelogs.

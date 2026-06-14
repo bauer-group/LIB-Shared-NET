@@ -5,7 +5,7 @@
       "label": "build",
       "command": "dotnet",
       "type": "process",
-      "args": ["build", "${workspaceFolder}/BAUERGROUP.Shared.Plattform.sln", "/property:GenerateFullPaths=true", "/consoleloggerparameters:NoSummary;ForceNoAlign"],
+      "args": ["build", "${workspaceFolder}/BAUERGROUP.Shared.slnx", "/property:GenerateFullPaths=true", "/consoleloggerparameters:NoSummary;ForceNoAlign"],
       "problemMatcher": "$msCompile",
       "group": {
         "kind": "build",
@@ -16,28 +16,28 @@
       "label": "build (Release)",
       "command": "dotnet",
       "type": "process",
-      "args": ["build", "${workspaceFolder}/BAUERGROUP.Shared.Plattform.sln", "-c", "Release", "/property:GenerateFullPaths=true", "/consoleloggerparameters:NoSummary;ForceNoAlign"],
+      "args": ["build", "${workspaceFolder}/BAUERGROUP.Shared.slnx", "-c", "Release", "/property:GenerateFullPaths=true", "/consoleloggerparameters:NoSummary;ForceNoAlign"],
       "problemMatcher": "$msCompile"
     },
     {
       "label": "clean",
       "command": "dotnet",
       "type": "process",
-      "args": ["clean", "${workspaceFolder}/BAUERGROUP.Shared.Plattform.sln"],
+      "args": ["clean", "${workspaceFolder}/BAUERGROUP.Shared.slnx"],
       "problemMatcher": "$msCompile"
     },
     {
       "label": "restore",
       "command": "dotnet",
       "type": "process",
-      "args": ["restore", "${workspaceFolder}/BAUERGROUP.Shared.Plattform.sln"],
+      "args": ["restore", "${workspaceFolder}/BAUERGROUP.Shared.slnx"],
       "problemMatcher": "$msCompile"
     },
     {
       "label": "test",
       "command": "dotnet",
       "type": "process",
-      "args": ["test", "${workspaceFolder}/BAUERGROUP.Shared.Plattform.sln", "--no-build"],
+      "args": ["test", "${workspaceFolder}/BAUERGROUP.Shared.slnx", "--no-build"],
       "problemMatcher": "$msCompile",
       "group": {
         "kind": "test",
@@ -51,7 +51,7 @@
       "type": "process",
       "args": [
         "test",
-        "${workspaceFolder}/BAUERGROUP.Shared.Plattform.sln",
+        "${workspaceFolder}/BAUERGROUP.Shared.slnx",
         "--collect:XPlat Code Coverage",
         "--results-directory",
         "${workspaceFolder}/TestResults"
@@ -62,7 +62,7 @@
       "label": "watch",
       "command": "dotnet",
       "type": "process",
-      "args": ["watch", "build", "--project", "${workspaceFolder}/BAUERGROUP.Shared.Plattform.sln"],
+      "args": ["watch", "build", "--project", "${workspaceFolder}/BAUERGROUP.Shared.slnx"],
       "problemMatcher": "$msCompile",
       "isBackground": true
     },
@@ -70,7 +70,7 @@
       "label": "pack",
       "command": "dotnet",
       "type": "process",
-      "args": ["pack", "${workspaceFolder}/BAUERGROUP.Shared.Plattform.sln", "-c", "Release", "-o", "${workspaceFolder}/artifacts"],
+      "args": ["pack", "${workspaceFolder}/BAUERGROUP.Shared.slnx", "-c", "Release", "-o", "${workspaceFolder}/artifacts"],
       "problemMatcher": "$msCompile"
     }
   ]
