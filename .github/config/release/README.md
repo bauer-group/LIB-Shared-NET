@@ -10,10 +10,20 @@ Diese Dokumentation beschreibt die Semantic Release Konfiguration für automatis
 
 | Commit-Prefix | Bedeutung | Version-Bump |
 |---------------|-----------|--------------|
+| `feat!:` oder `BREAKING CHANGE:` | Breaking Change | Major (1.0.0 → 2.0.0) |
 | `feat:` | Neues Feature | Minor (1.0.0 → 1.1.0) |
 | `fix:` | Bugfix | Patch (1.0.0 → 1.0.1) |
-| `feat!:` oder `BREAKING CHANGE:` | Breaking Change | Major (1.0.0 → 2.0.0) |
-| `docs:`, `chore:`, `style:`, `refactor:`, `test:` | Keine Änderung | Kein Release |
+| `perf:` | Performance | Patch (1.0.0 → 1.0.1) |
+| `revert:` | Revert | Patch (1.0.0 → 1.0.1) |
+| `refactor:` | Refactoring | Patch (1.0.0 → 1.0.1) |
+| `deps:` | Dependency-Update (Dependabot) | Patch (1.0.0 → 1.0.1) |
+| `docs:`, `chore:`, `style:`, `test:`, `ci:`, `build:` | Keine Änderung | Kein Release |
+
+> Die Release-Regeln sind explizit über `releaseRules` im `commit-analyzer`-Plugin
+> definiert (siehe unten). `deps:` ist bewusst release-auslösend, damit
+> Dependabot-Updates dieser geteilten Bibliothek automatisch auf NuGet
+> veröffentlicht werden und Konsumenten die aktualisierten (transitiven)
+> Pakete erhalten.
 
 ## Plugin-Konfiguration
 
@@ -23,7 +33,17 @@ Diese Dokumentation beschreibt die Semantic Release Konfiguration für automatis
 {
   "branches": ["main"],
   "plugins": [
-    "@semantic-release/commit-analyzer",
+    ["@semantic-release/commit-analyzer", {
+      "releaseRules": [
+        { "breaking": true, "release": "major" },
+        { "type": "feat", "release": "minor" },
+        { "type": "fix", "release": "patch" },
+        { "type": "perf", "release": "patch" },
+        { "type": "revert", "release": "patch" },
+        { "type": "refactor", "release": "patch" },
+        { "type": "deps", "release": "patch" }
+      ]
+    }],
     "@semantic-release/release-notes-generator",
     ["@semantic-release/changelog", {
       "changelogFile": "CHANGELOG.md"
