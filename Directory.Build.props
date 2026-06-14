@@ -8,7 +8,7 @@
     -->
     <!-- <TargetFramework>net10.0</TargetFramework> -->
     <!-- Versioning (managed by CI/CD) -->
-    <Version>3.0.7</Version>
+    <Version>3.0.8</Version>
     <!-- Language & Compiler Settings -->
     <LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
