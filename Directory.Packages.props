@@ -16,14 +16,14 @@
     <PackageVersion Include="NLog.Targets.WebService" Version="6.1.1" />
     <PackageVersion Include="Polly" Version="8.6.6" />
     <PackageVersion Include="Polly.Extensions" Version="8.6.6" />
-    <PackageVersion Include="Sentry" Version="6.5.0" />
-    <PackageVersion Include="Sentry.NLog" Version="6.5.0" />
+    <PackageVersion Include="Sentry" Version="6.6.0" />
+    <PackageVersion Include="Sentry.NLog" Version="6.6.0" />
     <!-- Data / Persistence -->
     <PackageVersion Include="LiteDB" Version="5.0.21" />
     <PackageVersion Include="NMemory" Version="3.1.6" />
     <PackageVersion Include="sqlite-net-pcl" Version="1.9.172" />
     <PackageVersion Include="SQLitePCLRaw.bundle_e_sqlcipher" Version="2.1.11" />
-    <PackageVersion Include="System.Runtime.Caching" Version="10.0.8" />
+    <PackageVersion Include="System.Runtime.Caching" Version="10.0.9" />
     <!-- File Processing -->
     <PackageVersion Include="CsvHelper" Version="33.1.0" />
     <PackageVersion Include="SharpZipLib" Version="1.4.2" />
@@ -35,22 +35,22 @@
     <!-- Reactive Extensions -->
     <PackageVersion Include="System.Reactive" Version="6.1.0" />
     <PackageVersion Include="ReactiveUI" Version="22.3.1" />
-    <PackageVersion Include="Splat" Version="19.2.1" />
-    <PackageVersion Include="Splat.NLog" Version="19.3.1" />
+    <PackageVersion Include="Splat" Version="20.0.0" />
+    <PackageVersion Include="Splat.NLog" Version="20.0.0" />
     <!-- Windows Desktop (WPF/WinForms) -->
     <PackageVersion Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.142" />
-    <PackageVersion Include="Microsoft.Web.WebView2" Version="1.0.3967.48" />
-    <PackageVersion Include="Microsoft.Win32.SystemEvents" Version="10.0.8" />
-    <PackageVersion Include="System.Configuration.ConfigurationManager" Version="10.0.8" />
-    <PackageVersion Include="System.Data.Odbc" Version="10.0.8" />
+    <PackageVersion Include="Microsoft.Web.WebView2" Version="1.0.4022.49" />
+    <PackageVersion Include="Microsoft.Win32.SystemEvents" Version="10.0.9" />
+    <PackageVersion Include="System.Configuration.ConfigurationManager" Version="10.0.9" />
+    <PackageVersion Include="System.Data.Odbc" Version="10.0.9" />
 
-    <PackageVersion Include="System.ServiceProcess.ServiceController" Version="10.0.8" />
-    <PackageVersion Include="System.Text.Encoding.CodePages" Version="10.0.8" />
-    <PackageVersion Include="System.Collections.Immutable" Version="10.0.8" />
+    <PackageVersion Include="System.ServiceProcess.ServiceController" Version="10.0.9" />
+    <PackageVersion Include="System.Text.Encoding.CodePages" Version="10.0.9" />
+    <PackageVersion Include="System.Collections.Immutable" Version="10.0.9" />
     <!-- CefSharp (Chromium Embedded Framework) -->
     <PackageVersion Include="CefSharp.Common.NETCore" Version="148.0.90" />
-    <PackageVersion Include="CefSharp.OffScreen.NETCore" Version="147.0.100" />
-    <PackageVersion Include="CefSharp.Wpf.NETCore" Version="147.0.100" />
+    <PackageVersion Include="CefSharp.OffScreen.NETCore" Version="148.0.90" />
+    <PackageVersion Include="CefSharp.Wpf.NETCore" Version="148.0.90" />
     <!-- Reporting (Stimulsoft) - Version bleibt wegen Lizenz! -->
     <PackageVersion Include="Stimulsoft.Dashboards.Win" Version="2022.1.2" />
     <PackageVersion Include="Stimulsoft.Reports.Wpf" Version="2022.1.2" />
@@ -59,7 +59,7 @@
     <PackageVersion Include="System.Text.Json" Version="10.0.2" />
     <PackageVersion Include="Microsoft.Bcl.AsyncInterfaces" Version="10.0.2" />
     <!-- Testing -->
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.5.1" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.6.0" />
     <PackageVersion Include="xunit" Version="2.9.3" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />
     <PackageVersion Include="coverlet.collector" Version="10.0.1" />
