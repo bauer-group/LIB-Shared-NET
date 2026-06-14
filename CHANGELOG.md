@@ -1,3 +1,9 @@
+## [3.0.6](https://github.com/bauer-group/LIB-Shared-NET/compare/v3.0.5...v3.0.6) (2026-06-14)
+
+### ♻️ Refactoring
+
+* **repo:** renamed to BAUERGROUP.Shared, migrated to slnx ([c039d39](https://github.com/bauer-group/LIB-Shared-NET/commit/c039d395cd243033a76ee76079fcf221770d420b))
+
 ## [3.0.5](https://github.com/bauer-group/LIB-Shared-NET/compare/v3.0.4...v3.0.5) (2026-06-12)
 
 ### 🐛 Bug Fixes
