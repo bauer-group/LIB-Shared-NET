@@ -1,3 +1,5 @@
+## [3.0.7](https://github.com/bauer-group/LIB-Shared-NET/compare/v3.0.6...v3.0.7) (2026-06-14)
+
 ## [3.0.6](https://github.com/bauer-group/LIB-Shared-NET/compare/v3.0.5...v3.0.6) (2026-06-14)
 
 ### ♻️ Refactoring
