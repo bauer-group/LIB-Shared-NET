@@ -39,7 +39,7 @@
     <PackageVersion Include="Splat.NLog" Version="20.0.0" />
     <!-- Windows Desktop (WPF/WinForms) -->
     <PackageVersion Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.142" />
-    <PackageVersion Include="Microsoft.Web.WebView2" Version="1.0.4022.49" />
+    <PackageVersion Include="Microsoft.Web.WebView2" Version="1.0.4078.44" />
     <PackageVersion Include="Microsoft.Win32.SystemEvents" Version="10.0.9" />
     <PackageVersion Include="System.Configuration.ConfigurationManager" Version="10.0.9" />
     <PackageVersion Include="System.Data.Odbc" Version="10.0.9" />
@@ -59,7 +59,7 @@
     <PackageVersion Include="System.Text.Json" Version="10.0.2" />
     <PackageVersion Include="Microsoft.Bcl.AsyncInterfaces" Version="10.0.2" />
     <!-- Testing -->
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.6.0" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.7.0" />
     <PackageVersion Include="xunit" Version="2.9.3" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />
     <PackageVersion Include="coverlet.collector" Version="10.0.1" />
