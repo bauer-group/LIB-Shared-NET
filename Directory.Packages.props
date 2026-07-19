@@ -16,7 +16,7 @@
     <PackageVersion Include="NLog.Targets.WebService" Version="6.1.1" />
     <PackageVersion Include="Polly" Version="8.7.0" />
     <PackageVersion Include="Polly.Extensions" Version="8.7.0" />
-    <PackageVersion Include="Sentry" Version="6.6.0" />
+    <PackageVersion Include="Sentry" Version="6.7.0" />
     <PackageVersion Include="Sentry.NLog" Version="6.6.0" />
     <!-- Data / Persistence -->
     <PackageVersion Include="LiteDB" Version="5.0.21" />
