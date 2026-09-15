@@ -548,9 +548,10 @@ namespace BAUERGROUP.Shared.Core.Logging
             // ${dir-separator} instead of a literal backslash, which is a file name character on Linux/macOS
             TargetFile.FileName = "${gdc:item=LogDirectory}${dir-separator}${gdc:item=ApplicationName}.log";
             TargetFile.KeepFileOpen = true;
-            // NLog 6.0: Archive configuration with ArchiveSuffixFormat
-            TargetFile.ArchiveFileName = "${gdc:item=LogDirectory}${dir-separator}${gdc:item=ApplicationName}.{#}.log";
-            TargetFile.ArchiveSuffixFormat = "yyyy-MM-dd";
+            // NLog 6.0: ArchiveSuffixFormat is a string.Format pattern ({0} = sequence number, {1} = archive date),
+            // not a date format. Archives are named <App>_yyyy-MM-dd_00.log, the active file stays <App>.log.
+            TargetFile.ArchiveFileName = "${gdc:item=LogDirectory}${dir-separator}${gdc:item=ApplicationName}.log";
+            TargetFile.ArchiveSuffixFormat = "_{1:yyyy-MM-dd}_{0:00}";
             TargetFile.ArchiveEvery = FileArchivePeriod.Day;
             TargetFile.MaxArchiveFiles = 30;
             TargetFile.Encoding = Encoding.Unicode;
