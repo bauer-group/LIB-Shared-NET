@@ -71,6 +71,7 @@ namespace BAUERGROUP.Shared.Core.ErrorTracking
                 options.TracesSampleRate = Configuration.TracesSampleRate;
                 options.AutoSessionTracking = Configuration.AutoSessionTracking;
                 options.MaxBreadcrumbs = Configuration.MaxBreadcrumbs;
+                ErrorTrackingCache.Apply(options, Configuration.CacheDirectoryPath, Configuration.MaxCacheItems, Configuration.InitCacheFlushTimeout);
 
                 // Global Mode für statische Verwendung
                 options.IsGlobalModeEnabled = true;

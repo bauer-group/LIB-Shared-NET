@@ -38,7 +38,29 @@ namespace BAUERGROUP.Shared.Core.ErrorTracking
             // Minimum Log Level für NLog Target
             MinimumLogLevel = ErrorTrackingLogLevel.Error;
             CaptureExceptionsOnly = false;
+
+            // Offline Cache
+            CacheDirectoryPath = ErrorTrackingCache.DefaultDirectoryPath;
+            MaxCacheItems = ErrorTrackingCache.DefaultMaxCacheItems;
+            InitCacheFlushTimeout = ErrorTrackingCache.DefaultInitCacheFlushTimeout;
         }
+
+        /// <summary>
+        /// Offline-Cache-Ordner: Reports werden vor dem Senden auf Disk geschrieben und bei Netzwerkfehlern
+        /// oder Prozessende später gesendet (default: {ApplicationFolders.ExecutionAutomaticApplicationDataFolder}/ErrorReports).
+        /// null oder leer deaktiviert den Cache. Muss vor <see cref="BGErrorTracking.Init(string)"/> gesetzt werden.
+        /// </summary>
+        public string? CacheDirectoryPath { get; set; }
+
+        /// <summary>
+        /// Maximale Anzahl gecachter Reports, bei Erreichen wird der älteste verworfen (default: 50)
+        /// </summary>
+        public int MaxCacheItems { get; set; }
+
+        /// <summary>
+        /// Wartezeit in Init auf das Senden gecachter Reports (default: 0, der Anwendungsstart wartet nie)
+        /// </summary>
+        public TimeSpan InitCacheFlushTimeout { get; set; }
 
         /// <summary>
         /// Sentry DSN (Data Source Name)

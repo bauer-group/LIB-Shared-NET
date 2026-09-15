@@ -1,4 +1,5 @@
 ﻿using BAUERGROUP.Shared.Core.Application;
+using BAUERGROUP.Shared.Core.ErrorTracking;
 using NLog;
 using NLog.Config;
 using NLog.Layouts;
@@ -418,6 +419,7 @@ namespace BAUERGROUP.Shared.Core.Logging
                     TargetErrorTracking.Options.Dsn = SentryDsn;
                     TargetErrorTracking.Options.MinimumEventLevel = SentryMinimumEventLevel;
                     TargetErrorTracking.Options.MinimumBreadcrumbLevel = SentryMinimumBreadcrumbLevel;
+                    ErrorTrackingCache.Apply(TargetErrorTracking.Options, SentryCacheDirectoryPath, SentryMaxCacheItems, SentryInitCacheFlushTimeout);
 
                     Targets.AddTarget("ERRORTRACKING", TargetErrorTracking);
                     Targets.LoggingRules.Add(LoggingRuleErrorTracking);
@@ -489,6 +491,23 @@ namespace BAUERGROUP.Shared.Core.Logging
             }
         }
         private LogLevel _sentryMinimumBreadcrumbLevel = LogLevel.Debug;
+
+        /// <summary>
+        /// Offline-Cache-Ordner für Sentry: Reports werden vor dem Senden auf Disk geschrieben und bei Netzwerkfehlern
+        /// oder Prozessende später gesendet (default: {ApplicationFolders.ExecutionAutomaticApplicationDataFolder}/ErrorReports).
+        /// null oder leer deaktiviert den Cache. Muss vor Aktivierung von ErrorTracking gesetzt werden.
+        /// </summary>
+        public string? SentryCacheDirectoryPath { get; set; } = ErrorTrackingCache.DefaultDirectoryPath;
+
+        /// <summary>
+        /// Maximale Anzahl gecachter Reports, bei Erreichen wird der älteste verworfen (default: 50)
+        /// </summary>
+        public int SentryMaxCacheItems { get; set; } = ErrorTrackingCache.DefaultMaxCacheItems;
+
+        /// <summary>
+        /// Wartezeit beim SDK-Start auf das Senden gecachter Reports (default: 0, der Anwendungsstart wartet nie)
+        /// </summary>
+        public TimeSpan SentryInitCacheFlushTimeout { get; set; } = ErrorTrackingCache.DefaultInitCacheFlushTimeout;
 
         /// <summary>
         /// Sentry Environment (default: basiert auf DEBUG/RELEASE)
