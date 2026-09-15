@@ -80,12 +80,8 @@ public class ApplicationConfigurationStoreXML<T> : IApplicationConfigurationStor
         get
         {
             var appDataFolder = ApplicationFolders.ExecutionAutomaticApplicationDataFolder;
-            var appConfigPath = Path.Combine(appDataFolder, $"{ApplicationProperties.Name}.Configuration.xml");
-
-            if (!Directory.Exists(appDataFolder))
-                Directory.CreateDirectory(appDataFolder);
-
-            return appConfigPath;
+            // The folder is created on Save, so an unwritable location fails when writing, not in the constructor
+            return Path.Combine(appDataFolder, $"{ApplicationProperties.Name}.Configuration.xml");
         }
     }
 }

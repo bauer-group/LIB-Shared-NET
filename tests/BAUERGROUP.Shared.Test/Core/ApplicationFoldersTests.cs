@@ -34,6 +34,47 @@ public class ApplicationFoldersTests
             .Be(Path.Combine(ApplicationFolders.CommonApplicationData, ExpectedName));
     }
 
+    [Theory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public void ResolveAutomaticApplicationDataFolder_WithRoamingVariable_ShouldUseRoamingProfileOnAnyOs(bool isWindows)
+    {
+        var folder = ApplicationFolders.ResolveAutomaticApplicationDataFolder(isWindows, "true", "MyApp", _ => true);
+
+        folder.Should().Be(Path.Combine(ApplicationFolders.ApplicationData, "MyApp"));
+    }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("FALSE")]
+    public void ResolveAutomaticApplicationDataFolder_OnWindows_ShouldUseCommonApplicationData(string? roamingVariable)
+    {
+        var folder = ApplicationFolders.ResolveAutomaticApplicationDataFolder(true, roamingVariable, "MyApp", _ => true);
+
+        folder.Should().Be(Path.Combine(ApplicationFolders.CommonApplicationData, "MyApp"));
+    }
+
+    [Fact]
+    public void ResolveAutomaticApplicationDataFolder_OnUnix_ShouldUseVarLibWhenItExists()
+    {
+        var expected = Path.Combine("/var/lib", "MyApp");
+
+        var folder = ApplicationFolders.ResolveAutomaticApplicationDataFolder(false, null, "MyApp", path => path == expected);
+
+        folder.Should().Be(expected);
+    }
+
+    [Fact]
+    public void ResolveAutomaticApplicationDataFolder_OnUnix_ShouldFallBackToPerUserFolder()
+    {
+        var folder = ApplicationFolders.ResolveAutomaticApplicationDataFolder(false, null, "MyApp", _ => false);
+
+        var localApplicationData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData, Environment.SpecialFolderOption.DoNotVerify);
+        folder.Should().Be(Path.Combine(localApplicationData, "MyApp"));
+        folder.Should().NotStartWith(ApplicationFolders.CommonApplicationData);
+    }
+
     [Fact]
     public void BGLoggerConfiguration_ApplicationName_ShouldNotBeEmpty()
     {

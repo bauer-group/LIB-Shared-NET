@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace BAUERGROUP.Shared.Core.Application
 {
@@ -139,23 +140,47 @@ namespace BAUERGROUP.Shared.Core.Application
         }
 
         /// <summary>
-        /// Gets the appropriate application data folder based on the BAUERGROUP_ROAMINGAPPLICATIONDATA environment variable.
+        /// Gets the appropriate application data folder based on the operating system and the BAUERGROUP_ROAMINGAPPLICATIONDATA environment variable.
         /// </summary>
         /// <remarks>
-        /// Returns <see cref="ExecutionApplicationDataFolder"/> if the environment variable is set to "TRUE",
-        /// otherwise returns <see cref="ExecutionCommonApplicationDataFolder"/>.
+        /// <list type="bullet">
+        /// <item>BAUERGROUP_ROAMINGAPPLICATIONDATA=TRUE (any OS): <see cref="ExecutionApplicationDataFolder"/>.</item>
+        /// <item>Windows: <see cref="ExecutionCommonApplicationDataFolder"/> (%ProgramData%\{App}).</item>
+        /// <item>Linux/macOS: /var/lib/{App} if that directory exists (created by the installer with the required owner),
+        /// otherwise the per-user folder under <see cref="Environment.SpecialFolder.LocalApplicationData"/>
+        /// (~/.local/share/{App} on Linux). <see cref="Environment.SpecialFolder.CommonApplicationData"/> maps to
+        /// /usr/share there, which normal users cannot write.</item>
+        /// </list>
+        /// The folder is not created; stores create it when saving.
         /// </remarks>
         public static String ExecutionAutomaticApplicationDataFolder
         {
             get
             {
-                var dataFolderControl = EnvironmentProperties.GetEnvironmentVariable(ForceApplicationDataFolderInUserProfileEnvironmentVariable);
-
-                if (!String.IsNullOrEmpty(dataFolderControl) && dataFolderControl?.ToUpper() == "TRUE")
-                    return ExecutionApplicationDataFolder; //Variable for Storing Configuration in Users Roaming Profile is present
-
-                return ExecutionCommonApplicationDataFolder; //Variable for Storing Configuration in Users Roaming Profile is absent
+                return ResolveAutomaticApplicationDataFolder(
+                    RuntimeInformation.IsOSPlatform(OSPlatform.Windows),
+                    EnvironmentProperties.GetEnvironmentVariable(ForceApplicationDataFolderInUserProfileEnvironmentVariable),
+                    ApplicationFileNameWithoutExtension,
+                    Directory.Exists);
             }
+        }
+
+        private const String UnixSystemApplicationDataRoot = "/var/lib";
+
+        internal static String ResolveAutomaticApplicationDataFolder(Boolean isWindows, String? roamingApplicationDataVariable, String applicationName, Func<String, Boolean> directoryExists)
+        {
+            if (String.Equals(roamingApplicationDataVariable, "TRUE", StringComparison.OrdinalIgnoreCase))
+                return Path.Combine(ApplicationData, applicationName);
+
+            if (isWindows)
+                return Path.Combine(CommonApplicationData, applicationName);
+
+            var systemFolder = Path.Combine(UnixSystemApplicationDataRoot, applicationName);
+            if (directoryExists(systemFolder))
+                return systemFolder;
+
+            // DoNotVerify: without it the runtime returns "" while ~/.local/share does not exist yet
+            return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData, Environment.SpecialFolderOption.DoNotVerify), applicationName);
         }
 
         /// <summary>

@@ -87,7 +87,7 @@ public class ApplicationConfigurationStoreBinary<T> : IApplicationConfigurationS
     }
 
     /// <summary>
-    /// Gets the default binary configuration file path.
+    /// Gets the default binary configuration file path. The folder is not created; <see cref="Save()"/> creates it.
     /// </summary>
     public static string ConfigurationBinaryFileName
     {
@@ -96,12 +96,8 @@ public class ApplicationConfigurationStoreBinary<T> : IApplicationConfigurationS
             var appDataFolder = ApplicationFolders.ExecutionAutomaticApplicationDataFolder;
             var entryAssembly = Assembly.GetEntryAssembly();
             var assemblyName = entryAssembly?.GetName().Name ?? "App";
-            var appConfigPath = Path.Combine(appDataFolder, $"{assemblyName}.Config.data");
 
-            if (!Directory.Exists(appDataFolder))
-                Directory.CreateDirectory(appDataFolder);
-
-            return appConfigPath;
+            return Path.Combine(appDataFolder, $"{assemblyName}.Config.data");
         }
     }
 

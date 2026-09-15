@@ -1,4 +1,5 @@
-﻿using NLog;
+﻿using BAUERGROUP.Shared.Core.Application;
+using NLog;
 using NLog.Config;
 using NLog.Layouts;
 using NLog.Targets;
@@ -8,6 +9,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace BAUERGROUP.Shared.Core.Logging
@@ -28,10 +30,7 @@ namespace BAUERGROUP.Shared.Core.Logging
 
             // Initialize LogDirectory with default value if not already set
             if (String.IsNullOrWhiteSpace(GlobalDiagnosticsContext.Get("LogDirectory")))
-                LogDirectory = Path.Combine(
-                    Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
-                    ApplicationName,
-                    "Logging");
+                LogDirectory = Path.Combine(DefaultApplicationDataFolder, "Logging");
 
             //Instances
             InitializeTargets();
@@ -83,8 +82,8 @@ namespace BAUERGROUP.Shared.Core.Logging
         }
 
         /// <summary>
-        /// Log directory path. If not set, defaults to {CommonApplicationData}/{ApplicationName}/Logging
-        /// (%ProgramData%\{ApplicationName}\Logging on Windows)
+        /// Log directory path. If not set, defaults to %ProgramData%\{ApplicationName}\Logging on Windows and to
+        /// {ApplicationFolders.ExecutionAutomaticApplicationDataFolder}/Logging on Linux/macOS.
         /// </summary>
         public static String LogDirectory
         {
@@ -96,6 +95,19 @@ namespace BAUERGROUP.Shared.Core.Logging
             set
             {
                 GlobalDiagnosticsContext.Set("LogDirectory", value);
+            }
+        }
+
+        // Windows keeps its historical location (named after ApplicationName, independent of
+        // BAUERGROUP_ROAMINGAPPLICATIONDATA) so installed stations do not move their logs.
+        // Elsewhere CommonApplicationData is /usr/share, which normal users cannot write.
+        private static String DefaultApplicationDataFolder
+        {
+            get
+            {
+                return RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
+                    ? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), ApplicationName)
+                    : ApplicationFolders.ExecutionAutomaticApplicationDataFolder;
             }
         }
 
