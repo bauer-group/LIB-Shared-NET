@@ -101,7 +101,7 @@ public class SchedulerTests : IDisposable
         _scheduler.RegisterJob(job);
 
         await _scheduler.StartAsync();
-        await Task.Delay(500);
+        await WaitForExecutionsAsync(job, atLeast: 1, timeout: TimeSpan.FromSeconds(5));
         await _scheduler.StopAsync();
 
         job.ExecutionCount.Should().BeGreaterThan(0);
@@ -163,6 +163,18 @@ public class SchedulerTests : IDisposable
         }
     }
 
+    // Polls instead of a fixed delay: on a busy CI runner the first execution can take longer than the interval
+    private static async Task WaitUntilAsync(Func<bool> condition, TimeSpan timeout, string description)
+    {
+        var deadline = DateTime.UtcNow + timeout;
+        while (!condition())
+        {
+            if (DateTime.UtcNow > deadline)
+                throw new TimeoutException($"Condition not met within {timeout.TotalMilliseconds}ms: {description}");
+            await Task.Delay(20);
+        }
+    }
+
     [Fact]
     public async Task Start_SetsLastExecution()
     {
@@ -171,7 +183,7 @@ public class SchedulerTests : IDisposable
         job.LastExecution.Should().BeNull();
 
         await _scheduler.StartAsync();
-        await Task.Delay(500);
+        await WaitUntilAsync(() => job.LastExecution != null, TimeSpan.FromSeconds(5), "LastExecution set");
         await _scheduler.StopAsync();
 
         job.LastExecution.Should().NotBeNull();
@@ -184,7 +196,7 @@ public class SchedulerTests : IDisposable
         _scheduler.RegisterJob(job);
 
         await _scheduler.StartAsync();
-        await Task.Delay(500);
+        await WaitUntilAsync(() => job.SuccessfulExecution, TimeSpan.FromSeconds(5), "SuccessfulExecution set");
         await _scheduler.StopAsync();
 
         job.SuccessfulExecution.Should().BeTrue();
