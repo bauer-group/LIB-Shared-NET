@@ -86,7 +86,8 @@ namespace BAUERGROUP.Shared.Core.Logging
         }
 
         /// <summary>
-        /// Log directory path. If not set, defaults to %ProgramData%\{ApplicationName}\Logging
+        /// Log directory path. If not set, defaults to {CommonApplicationData}/{ApplicationName}/Logging
+        /// (%ProgramData%\{ApplicationName}\Logging on Windows)
         /// </summary>
         public static String LogDirectory
         {
@@ -544,10 +545,11 @@ namespace BAUERGROUP.Shared.Core.Logging
 
             TargetFile = new FileTarget();
             TargetFile.Layout = @"${longdate::universalTime=true} - ${level:uppercase=true}: ${message}${onexception:${newline}EXCEPTION DETAILS\:${newline}${exception:format=ToString}}";
-            TargetFile.FileName = @"${gdc:item=LogDirectory}\${gdc:item=ApplicationName}.log";
+            // ${dir-separator} instead of a literal backslash, which is a file name character on Linux/macOS
+            TargetFile.FileName = "${gdc:item=LogDirectory}${dir-separator}${gdc:item=ApplicationName}.log";
             TargetFile.KeepFileOpen = true;
             // NLog 6.0: Archive configuration with ArchiveSuffixFormat
-            TargetFile.ArchiveFileName = @"${gdc:item=LogDirectory}\${gdc:item=ApplicationName}.{#}.log";
+            TargetFile.ArchiveFileName = "${gdc:item=LogDirectory}${dir-separator}${gdc:item=ApplicationName}.{#}.log";
             TargetFile.ArchiveSuffixFormat = "yyyy-MM-dd";
             TargetFile.ArchiveEvery = FileArchivePeriod.Day;
             TargetFile.MaxArchiveFiles = 30;
