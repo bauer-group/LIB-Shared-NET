@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
 using Sentry;
@@ -97,7 +96,7 @@ namespace BAUERGROUP.Shared.Core.ErrorTracking
             try
             {
                 var assembly = Assembly.GetEntryAssembly() ?? Assembly.GetExecutingAssembly();
-                var name = Path.GetFileNameWithoutExtension(assembly.Location);
+                var name = assembly.GetName().Name;
                 var version = assembly.GetName().Version;
                 return $"{name}@{version}";
             }

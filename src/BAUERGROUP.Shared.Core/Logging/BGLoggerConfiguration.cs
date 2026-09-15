@@ -23,10 +23,7 @@ namespace BAUERGROUP.Shared.Core.Logging
             //Basic
             if (String.IsNullOrWhiteSpace(GlobalDiagnosticsContext.Get("ApplicationName")))
             {
-                var entryAssembly = Assembly.GetEntryAssembly();
-                ApplicationName = entryAssembly != null
-                    ? Path.GetFileNameWithoutExtension(entryAssembly.Location)
-                    : "UnknownApp";
+                ApplicationName = Assembly.GetEntryAssembly()?.GetName().Name ?? "UnknownApp";
             }
 
             // Initialize LogDirectory with default value if not already set

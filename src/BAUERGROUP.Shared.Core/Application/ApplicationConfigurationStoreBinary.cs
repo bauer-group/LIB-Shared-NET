@@ -95,7 +95,7 @@ public class ApplicationConfigurationStoreBinary<T> : IApplicationConfigurationS
         {
             var appDataFolder = ApplicationFolders.ExecutionAutomaticApplicationDataFolder;
             var entryAssembly = Assembly.GetEntryAssembly();
-            var assemblyName = entryAssembly != null ? Path.GetFileNameWithoutExtension(entryAssembly.Location) : "App";
+            var assemblyName = entryAssembly?.GetName().Name ?? "App";
             var appConfigPath = Path.Combine(appDataFolder, $"{assemblyName}.Config.data");
 
             if (!Directory.Exists(appDataFolder))

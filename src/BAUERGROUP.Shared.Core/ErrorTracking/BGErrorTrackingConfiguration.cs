@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 using System.Reflection;
 
 namespace BAUERGROUP.Shared.Core.ErrorTracking
@@ -15,7 +14,7 @@ namespace BAUERGROUP.Shared.Core.ErrorTracking
             try
             {
                 var assembly = Assembly.GetEntryAssembly() ?? Assembly.GetExecutingAssembly();
-                ApplicationName = Path.GetFileNameWithoutExtension(assembly.Location);
+                ApplicationName = assembly.GetName().Name ?? "Unknown";
             }
             catch (Exception)
             {

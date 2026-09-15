@@ -5,7 +5,6 @@ using System.Text;
 using NLog;
 using NLog.Targets;
 using NLog.Config;
-using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -38,8 +37,8 @@ namespace BAUERGROUP.Shared.Core.Logging
             }
             else
             {
-                var name = Path.GetFileNameWithoutExtension(assembly.Location);
-                Backend = LogManager.GetLogger(name);
+                var name = assembly.GetName().Name;
+                Backend = String.IsNullOrWhiteSpace(name) ? LogManager.GetCurrentClassLogger() : LogManager.GetLogger(name);
             }
         }
 

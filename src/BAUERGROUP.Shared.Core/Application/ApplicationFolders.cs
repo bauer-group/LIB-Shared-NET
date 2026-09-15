@@ -22,22 +22,36 @@ namespace BAUERGROUP.Shared.Core.Application
         /// <summary>
         /// Gets the directory containing the application binary.
         /// </summary>
+        /// <remarks>
+        /// Based on <see cref="AppContext.BaseDirectory"/>, because <c>Assembly.Location</c> is empty in single-file applications.
+        /// </remarks>
         public static String? ApplicationBinary
         {
             get
             {
-                return Path.GetDirectoryName(ApplicationProperties.AutomaticAssembly.Location);
+                return BaseDirectory;
             }
         }
 
         /// <summary>
-        /// Gets the application file name without the extension.
+        /// Gets the application name, which is the file name of the application without the extension.
         /// </summary>
+        /// <remarks>
+        /// Based on the assembly name, because <c>Assembly.Location</c> is empty in single-file applications.
+        /// </remarks>
         public static String ApplicationFileNameWithoutExtension
         {
             get
             {
-                return Path.GetFileNameWithoutExtension(ApplicationProperties.AutomaticAssembly.Location);
+                return ApplicationProperties.AutomaticAssembly.GetName().Name ?? String.Empty;
+            }
+        }
+
+        private static String BaseDirectory
+        {
+            get
+            {
+                return AppContext.BaseDirectory.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
             }
         }
 
@@ -77,11 +91,14 @@ namespace BAUERGROUP.Shared.Core.Application
         /// <summary>
         /// Gets the directory containing the currently executing assembly.
         /// </summary>
+        /// <remarks>
+        /// Based on <see cref="AppContext.BaseDirectory"/>, because <c>Assembly.Location</c> is empty in single-file applications.
+        /// </remarks>
         public static String? ApplicationExecuting
         {
             get
             {
-                return Path.GetDirectoryName(ApplicationProperties.ExecutingAssembly.Location);
+                return BaseDirectory;
             }
         }
 
