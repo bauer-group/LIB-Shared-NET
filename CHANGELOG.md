@@ -1,3 +1,29 @@
+# Changelog
+
+All notable changes to this project are documented here. This file is maintained
+automatically by [semantic-release](https://github.com/semantic-release/semantic-release)
+on every release to `main`.
+
+## [3.1.0](https://github.com/bauer-group/LIB-Shared-NET/compare/v3.0.8...v3.1.0) (2026-09-15)
+
+### 🚀 Features
+
+* **error-tracking:** enabled the Sentry offline cache by default ([735bce6](https://github.com/bauer-group/LIB-Shared-NET/commit/735bce69c1836bb4b614af25b24b1c80cc300877)), closes [#133](https://github.com/bauer-group/LIB-Shared-NET/issues/133)
+
+### 🐛 Bug Fixes
+
+* **ci:** added the missing permissions block ([c803b6e](https://github.com/bauer-group/LIB-Shared-NET/commit/c803b6e66870292bbad7c367cb433362b2830a2c))
+* **core:** fixed empty names and folders in single-file applications ([155e7c7](https://github.com/bauer-group/LIB-Shared-NET/commit/155e7c7989964f07d381c06b9f8004ff375775fe)), closes [#132](https://github.com/bauer-group/LIB-Shared-NET/issues/132)
+* **core:** resolved Linux data and log folders to writable locations ([afdb837](https://github.com/bauer-group/LIB-Shared-NET/commit/afdb837a50ae14654dc323d6a30ee30db0cd531e)), closes [#135](https://github.com/bauer-group/LIB-Shared-NET/issues/135)
+* **logging:** fixed daily log archives collapsing into one file ([8da54ab](https://github.com/bauer-group/LIB-Shared-NET/commit/8da54abe7bdfceb147055b9a10ac6ed7c0911e6a)), closes [#137](https://github.com/bauer-group/LIB-Shared-NET/issues/137)
+* **logging:** replaced hard-coded backslash in log file paths ([e00d4c6](https://github.com/bauer-group/LIB-Shared-NET/commit/e00d4c6c401f09ed4b162a492840218d26ded134)), closes [#134](https://github.com/bauer-group/LIB-Shared-NET/issues/134)
+
+### 🔧 Maintenance
+
+* **ci:** removed redundant teams notification ([02325dd](https://github.com/bauer-group/LIB-Shared-NET/commit/02325dd7bc0ccfcb3856509dd1aba6616197527d))
+* **codeowners:** reassigned ownership to core team [skip ci] ([8f66d33](https://github.com/bauer-group/LIB-Shared-NET/commit/8f66d338c8c5ec098c764df34813c674bcb896e0))
+* **codeowners:** reassigned ownership to core team [skip ci] ([87c8168](https://github.com/bauer-group/LIB-Shared-NET/commit/87c8168f5154ca6b1552af5eee6ececf52da5ef0))
+
 ## [3.0.8](https://github.com/bauer-group/LIB-Shared-NET/compare/v3.0.7...v3.0.8) (2026-06-14)
 
 ## [3.0.7](https://github.com/bauer-group/LIB-Shared-NET/compare/v3.0.6...v3.0.7) (2026-06-14)
