@@ -17,9 +17,6 @@
     <PackageReference Include="System.ServiceProcess.ServiceController" />
     <PackageReference Include="System.Text.Encoding.CodePages" />
     <PackageReference Include="System.Collections.Immutable" />
-    <PackageReference Include="ReactiveUI" />
-    <PackageReference Include="Splat" />
-    <PackageReference Include="Splat.NLog" />
     <PackageReference Include="System.Reactive" />
   </ItemGroup>
 

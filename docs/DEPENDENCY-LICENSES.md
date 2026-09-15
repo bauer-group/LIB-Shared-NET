@@ -81,9 +81,6 @@ Since all dependencies are **dynamically linked** (not statically), all licenses
 | Package | Version | License | Compatibility |
 |---------|---------|---------|---------------|
 | System.Reactive | 6.0.1 | MIT | ✅ Compatible |
-| ReactiveUI | 20.1.63 | MIT | ✅ Compatible |
-| Splat | 15.2.22 | MIT | ✅ Compatible |
-| Splat.NLog | 15.2.22 | MIT | ✅ Compatible |
 
 ### Windows Desktop (WPF/WinForms)
 
