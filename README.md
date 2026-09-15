@@ -75,9 +75,10 @@ dotnet add package BAUERGROUP.Shared.Core
 ```csharp
 using BAUERGROUP.Shared.Core.Logging;
 
-// Configure logging (settings are applied through the Configuration property)
-BGLogger.Configuration.ApplicationName = "MyApplication";
-BGLogger.Configuration.LogDirectory = @"C:\Logs";
+// Optional: override name and log folder before BGLogger is first used
+// (defaults: executable name, see "Data, Log and Error-Report Folders")
+BGLoggerConfiguration.ApplicationName = "MyApplication";
+BGLoggerConfiguration.LogDirectory = @"C:\Logs";
 
 // Enable Sentry error tracking (optional)
 BGLogger.Configuration.SentryDsn = "https://your-sentry-dsn@sentry.io/project";
@@ -255,6 +256,12 @@ BGLogger.Configuration.SentryDsn = "https://...@sentry.io/...";
 BGLogger.Configuration.SentryEnvironment = "production";
 BGLogger.Configuration.SentryMinimumEventLevel = NLog.LogLevel.Error;
 BGLogger.Configuration.SentryMinimumBreadcrumbLevel = NLog.LogLevel.Debug;
+
+// Offline cache (enabled by default): unsent reports survive network failures and process exit
+BGLogger.Configuration.SentryCacheDirectoryPath = "/custom/ErrorReports"; // null or "" disables the cache
+BGLogger.Configuration.SentryMaxCacheItems = 50;                         // oldest report is dropped beyond this
+BGLogger.Configuration.SentryInitCacheFlushTimeout = TimeSpan.Zero;      // start never waits for the cache
+
 BGLogger.Configuration.ErrorTracking = true;
 ```
 
@@ -264,6 +271,25 @@ Features:
 - Breadcrumbs, context, and event capture
 - User tracking with Windows identity
 - Tags for ApplicationName, MachineName, ProcessName
+- Offline cache: reports are written to disk before sending and sent on the next start if they could not be delivered. A cache folder that cannot be created disables the cache with a logged warning; reporting continues online.
+
+The standalone `BGErrorTracking.Init(dsn)` API uses the same defaults via `BGErrorTracking.Configuration.CacheDirectoryPath`, `MaxCacheItems` and `InitCacheFlushTimeout`.
+
+### Data, Log and Error-Report Folders
+
+Settings stores, the embedded database, the default log directory and the Sentry offline cache all live below one application data folder. `<App>` is the entry assembly name (also correct in single-file applications); `<ApplicationName>` is `BGLoggerConfiguration.ApplicationName`, which defaults to the same value.
+
+| What | Windows | Linux / macOS |
+|---|---|---|
+| Data folder (`ApplicationFolders.ExecutionAutomaticApplicationDataFolder`) | `%ProgramData%\<App>` | `/var/lib/<App>` if that directory exists, otherwise `~/.local/share/<App>` (per user) |
+| Data folder with `BAUERGROUP_ROAMINGAPPLICATIONDATA=TRUE` | `%APPDATA%\<App>` | `~/.config/<App>` |
+| Default log directory (`BGLoggerConfiguration.LogDirectory`) | `%ProgramData%\<ApplicationName>\Logging` (always, see note) | `<data folder>/Logging` |
+| Log files | `<ApplicationName>.log`; daily archives `<ApplicationName>_yyyy-MM-dd_00.log`, 30 kept | same |
+| Sentry offline cache | `<data folder>\ErrorReports` | `<data folder>/ErrorReports` |
+
+**Windows log directory:** it deliberately keeps its historical location so installed stations do not move their logs. It is named after `ApplicationName` (not the executable) and ignores `BAUERGROUP_ROAMINGAPPLICATIONDATA`, so with the variable set, settings live in `%APPDATA%` while logs stay in `%ProgramData%`. Set `BGLoggerConfiguration.LogDirectory` explicitly to place logs elsewhere.
+
+**Linux stations:** `/usr/share` (what .NET reports as `CommonApplicationData`) is never used, because normal users cannot write there. For one shared folder per station, let the installer create `/var/lib/<App>` with the owner the application runs as, e.g. `install -d -o <user> /var/lib/<App>` or systemd `StateDirectory=<App>`. Without it, each OS user gets their own folder. Folders are resolved without being created; stores and the logger create them on first write.
 
 ---
 

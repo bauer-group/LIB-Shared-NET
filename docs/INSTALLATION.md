@@ -178,37 +178,28 @@ BAUERGROUP.Shared.Core (Base)
 ```csharp
 using BAUERGROUP.Shared.Core.Logging;
 
-// Minimal configuration - uses auto-detected defaults
-var config = new BGLoggerConfiguration();
-BGLogger.Configure(config);
-BGLogger.Reload();
-
-// Usage
+// No setup needed: the first use applies auto-detected defaults (file logging enabled)
 BGLogger.Info("Application started");
 BGLogger.Warn("Warning: {0}", warningMessage);
 BGLogger.Error(exception, "An error occurred");
 ```
 
 **Auto-detected defaults:**
-- `ApplicationName`: Executable name (without `.exe`)
-- `LogDirectory`: `%ProgramData%\{ApplicationName}\Logging`
+
+- `ApplicationName`: Executable name (without `.exe`), also in single-file applications
+- `LogDirectory`: `%ProgramData%\{ApplicationName}\Logging` on Windows; on Linux/macOS `/var/lib/{App}/Logging` if `/var/lib/{App}` exists, otherwise `~/.local/share/{App}/Logging`. See [Data, Log and Error-Report Folders](../README.md#data-log-and-error-report-folders).
 
 **Optional overrides:**
 
 ```csharp
-// Override ApplicationName and/or LogDirectory before creating configuration
+// Override ApplicationName and/or LogDirectory before BGLogger is first used
 BGLoggerConfiguration.ApplicationName = "CustomAppName";
 BGLoggerConfiguration.LogDirectory = @"C:\CustomLogs";
 
-var config = new BGLoggerConfiguration();
-
 // Enable Sentry error tracking (optional)
-config.SentryDsn = "https://xxx@sentry.io/123";
-config.SentryEnvironment = "production";
-config.ErrorTracking = true;
-
-BGLogger.Configure(config);
-BGLogger.Reload();
+BGLogger.Configuration.SentryDsn = "https://xxx@sentry.io/123";
+BGLogger.Configuration.SentryEnvironment = "production";
+BGLogger.Configuration.ErrorTracking = true;
 ```
 
 ### REST API Client
