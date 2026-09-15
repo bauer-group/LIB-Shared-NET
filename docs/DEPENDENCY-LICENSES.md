@@ -53,8 +53,7 @@ Since all dependencies are **dynamically linked** (not statically), all licenses
 |---------|---------|---------|---------------|
 | LiteDB | 5.0.21 | MIT | ✅ Compatible |
 | NMemory | 3.1.0 | MIT | ✅ Compatible |
-| sqlite-net-pcl | 1.9.172 | MIT | ✅ Compatible |
-| SQLitePCLRaw.bundle_e_sqlcipher | 2.1.10 | Apache 2.0 | ✅ Compatible |
+| sqlite-net-pcl | 1.11.285 | MIT | ✅ Compatible |
 | System.Runtime.Caching | 9.0.0 | MIT | ✅ Compatible |
 
 ### File Processing
