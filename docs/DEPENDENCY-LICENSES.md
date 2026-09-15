@@ -16,21 +16,20 @@ This document lists the NuGet packages referenced in `Directory.Packages.props` 
 |-------------|-------|---------------------|-------|
 | MIT | 23 | ✅ Yes | Permissive, no restrictions |
 | BSD 2-Clause/3-Clause | 14 | ✅ Yes | Permissive |
-| Apache 2.0 | 3 | ✅ Yes | Permissive, requires attribution |
+| Apache 2.0 | 4 | ✅ Yes | Permissive, requires attribution |
 | MS-PL OR Apache 2.0 | 1 | ✅ Yes | CsvHelper (dual licensed) |
 | Proprietary | 2 | ⚠️ Conditional | Stimulsoft - requires own license |
-| Xceed Community License | 1 | ⚠️ Non-commercial only | FluentAssertions 8 - test-only, see below |
 
 ### Conclusion
 
-✅ **No license collisions in the shipped packages.**
+✅ **No license collisions.**
 
-All runtime dependencies are permissive (MIT, BSD, Apache 2.0) except Stimulsoft, which requires its own commercial license. All dependencies are **dynamically linked**.
+All dependencies are permissive (MIT, BSD, Apache 2.0) except Stimulsoft, which requires its own commercial license. All dependencies are **dynamically linked**.
 
 **Notes:**
 
 1. **Stimulsoft**: Proprietary license - requires own license key (see below)
-2. **FluentAssertions 8.x**: licensed under the *Xceed Community License Agreement (for Non-Commercial Use)* since version 8. It is a test-only dependency and is not part of any published package, but commercial use of the test suite needs a paid license or a switch to an Apache 2.0 alternative (FluentAssertions 7.2.0 or the community fork AwesomeAssertions).
+2. **Assertions library**: the tests use AwesomeAssertions (Apache 2.0). FluentAssertions 8+ is licensed under the *Xceed Community License Agreement (for Non-Commercial Use)* and must not be reintroduced without a commercial license.
 
 ---
 
@@ -149,7 +148,7 @@ Stimulsoft 2022.1.2 brings in System.Data.SqlClient 4.7.0 (MIT) transitively, wh
 | xunit | 2.9.3 | Apache 2.0 | ✅ Compatible |
 | xunit.runner.visualstudio | 3.1.5 | Apache 2.0 | ✅ Compatible |
 | coverlet.collector | 10.0.1 | MIT | ✅ Compatible |
-| FluentAssertions | 8.10.0 | **Xceed Community License (Non-Commercial Use)** | ⚠️ Non-commercial only |
+| AwesomeAssertions | 9.6.0 | Apache 2.0 | ✅ Compatible |
 | Moq | 4.20.72 | BSD 3-Clause | ✅ Compatible |
 
 ### Build / Source Link
@@ -192,10 +191,6 @@ Apache 2.0 is permissive with additional patent grants:
 - Changes must be documented
 
 **Requirements:** Include NOTICE file if present, state changes
-
-### Xceed Community License (FluentAssertions 8+)
-
-Free only for non-commercial use (open-source, personal or experimental projects, organisations that do not earn revenue). Use by or for a company requires a commercial license from Xceed.
 
 ### Proprietary (Stimulsoft)
 

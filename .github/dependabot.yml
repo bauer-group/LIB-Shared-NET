@@ -30,7 +30,7 @@ updates:
       testing:
         patterns:
           - "xunit*"
-          - "FluentAssertions*"
+          - "AwesomeAssertions*"
           - "coverlet*"
           - "Moq*"
     # License-pinned packages: do not update.
