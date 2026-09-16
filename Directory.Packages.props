@@ -11,7 +11,7 @@
     <PackageVersion Include="NLog.WindowsEventLog" Version="6.1.4" />
     <!-- NLog 6.0 separate target packages -->
     <PackageVersion Include="NLog.Targets.Mail" Version="6.1.1" />
-    <PackageVersion Include="NLog.Targets.Network" Version="6.0.4" />
+    <PackageVersion Include="NLog.Targets.Network" Version="6.1.5" />
     <PackageVersion Include="NLog.Targets.Trace" Version="6.0.3" />
     <PackageVersion Include="NLog.Targets.WebService" Version="6.1.1" />
     <PackageVersion Include="Polly" Version="8.7.0" />
