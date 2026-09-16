@@ -12,6 +12,7 @@ This documentation describes the installation and usage of BAUERGROUP.Shared NuG
 | `BAUERGROUP.Shared.API` | REST API client | net10.0, net8.0, netstandard2.0 |
 | `BAUERGROUP.Shared.Data` | Data persistence (SQLite, LiteDB) | net10.0, net8.0, netstandard2.0 |
 | `BAUERGROUP.Shared.Cloud` | Cloud services (Cloudinary, Remove.bg, Fixer.io) | net10.0, net8.0 |
+| `BAUERGROUP.Shared.Avalonia` | Cross-platform Avalonia UI components (Windows, Linux, macOS), incl. live log viewer | net10.0, net8.0 |
 | `BAUERGROUP.Shared.Desktop` | WPF/WinForms utilities | net10.0-windows, net8.0-windows |
 | `BAUERGROUP.Shared.Desktop.Browser` | Embedded browser (CefSharp, WebView2) | net10.0-windows, net8.0-windows |
 | `BAUERGROUP.Shared.Desktop.Reporting` | Reporting (Stimulsoft)* | net10.0-windows, net8.0-windows |
@@ -34,6 +35,7 @@ dotnet add package BAUERGROUP.Shared.Core
 dotnet add package BAUERGROUP.Shared.API
 dotnet add package BAUERGROUP.Shared.Data
 dotnet add package BAUERGROUP.Shared.Cloud
+dotnet add package BAUERGROUP.Shared.Avalonia
 dotnet add package BAUERGROUP.Shared.Desktop
 dotnet add package BAUERGROUP.Shared.Desktop.Browser
 dotnet add package BAUERGROUP.Shared.Desktop.Reporting
@@ -46,6 +48,7 @@ Install-Package BAUERGROUP.Shared.Core
 Install-Package BAUERGROUP.Shared.API
 Install-Package BAUERGROUP.Shared.Data
 Install-Package BAUERGROUP.Shared.Cloud
+Install-Package BAUERGROUP.Shared.Avalonia
 ```
 
 ### PackageReference (csproj)
@@ -160,6 +163,8 @@ BAUERGROUP.Shared.Core (Base)
     │
     ├── BAUERGROUP.Shared.Data
     │
+    ├── BAUERGROUP.Shared.Avalonia
+    │
     └── BAUERGROUP.Shared.Desktop
             │
             ├── BAUERGROUP.Shared.Desktop.Browser
@@ -168,6 +173,8 @@ BAUERGROUP.Shared.Core (Base)
 ```
 
 **Note:** Dependencies are resolved automatically.
+
+**Third-party dependencies of `BAUERGROUP.Shared.Avalonia`:** only `Avalonia` (MIT). It deliberately references no theme package — the viewer picks up the theme of the host application (for example `Avalonia.Themes.Fluent`), which your application references anyway.
 
 ---
 
@@ -201,6 +208,33 @@ BGLogger.Configuration.SentryDsn = "https://xxx@sentry.io/123";
 BGLogger.Configuration.SentryEnvironment = "production";
 BGLogger.Configuration.ErrorTracking = true;
 ```
+
+### Live Log Viewer (Avalonia)
+
+`BAUERGROUP.Shared.Avalonia` shows the running process's own log events through an in-process sink — no UDP socket and no log file to tail. The viewer registers the sink only while it is visible.
+
+```csharp
+using Avalonia.Controls;
+using BAUERGROUP.Shared.Avalonia.Logging;
+
+// Opens a log window owned by `owner`, or closes the one it already owns - ideal for an F12 handler
+public static void ToggleLog(Window owner)
+{
+    LogViewerWindow.Toggle(owner, "Diagnostics");
+}
+```
+
+Or embed the control in your own layout:
+
+```xml
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:logging="clr-namespace:BAUERGROUP.Shared.Avalonia.Logging;assembly=BAUERGROUP.Shared.Avalonia">
+  <logging:LogViewer MaxLines="10000" ShowToolbar="True" />
+</UserControl>
+```
+
+To feed a UI of your own, use `BGLogViewBuffer` (in `BAUERGROUP.Shared.Core`, no Avalonia needed) or register a callback with `BGLogger.Configuration.AddLiveSink(...)`. See the [README](../README.md#live-log-viewer-avalonia) for the full example and the rules a sink callback has to follow.
 
 ### REST API Client
 
@@ -306,6 +340,16 @@ Use the `-windows` variants:
 <TargetFramework>net10.0-windows</TargetFramework>
 ```
 
+### For Cross-Platform Desktop (Avalonia)
+
+`BAUERGROUP.Shared.Avalonia` targets plain `net10.0` and `net8.0`. It needs **no** `-windows` TFM and runs unchanged on Windows, Linux (X11/Wayland) and macOS:
+
+```xml
+<TargetFramework>net8.0</TargetFramework>
+```
+
+It is therefore also the only UI package you can reference from a project that has to build on a Linux CI runner.
+
 ---
 
 ## Versioning
@@ -355,7 +399,7 @@ dotnet add package BAUERGROUP.Shared.Core --version 2.0.1
 
 ### Windows-specific Packages on Linux
 
-Desktop packages are only available for Windows. For cross-platform development:
+The `Desktop*` packages are Windows-only. For cross-platform development:
 
 ```xml
 <ItemGroup Condition="'$(TargetFramework)' == 'net10.0-windows'">
@@ -363,13 +407,15 @@ Desktop packages are only available for Windows. For cross-platform development:
 </ItemGroup>
 ```
 
+For UI that has to run on Linux and macOS as well, use `BAUERGROUP.Shared.Avalonia` instead — it carries no Windows-only TFM and needs no condition.
+
 ---
 
 ## Further Documentation
 
 - [BUILD.md](BUILD.md) - Build instructions
 - [DEPENDENCY-LICENSES.md](DEPENDENCY-LICENSES.md) - License analysis
-- [CHANGELOG.md](CHANGELOG.md) - Change log
+- [CHANGELOG.md](../CHANGELOG.md) - Change log
 
 ---
 

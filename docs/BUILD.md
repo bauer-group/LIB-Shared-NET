@@ -100,6 +100,7 @@ Get-ChildItem -Include bin,obj -Recurse -Directory | Remove-Item -Recurse -Force
 | `BAUERGROUP.Shared.Data` | Data access and persistence |
 | `BAUERGROUP.Shared.API` | HTTP/API client functionality |
 | `BAUERGROUP.Shared.Cloud` | Cloud service integrations |
+| `BAUERGROUP.Shared.Avalonia` | Cross-platform Avalonia UI components (live log viewer), `net10.0;net8.0` |
 | `BAUERGROUP.Shared.Desktop` | WPF/Desktop base components |
 | `BAUERGROUP.Shared.Desktop.Browser` | Browser integration (CefSharp, WebView2) |
 | `BAUERGROUP.Shared.Desktop.Reporting` | Reporting functionality (Stimulsoft) |
@@ -143,11 +144,29 @@ The repository includes a comprehensive GitHub Actions workflow for automated CI
 | Feature | Description |
 |---------|-------------|
 | **PR Validation** | Build and test on every pull request |
+| **Linux Validation** | Second validation job on `ubuntu-latest` for the cross-platform Avalonia package |
 | **Semantic Versioning** | Automatic version bumps based on conventional commits |
 | **Release Creation** | Automatic GitHub releases with changelog |
 | **NuGet Publishing** | Publish to NuGet.org and GitHub Packages |
 | **Assembly Signing** | Strong-name signing with SNK key |
 | **Dependabot** | Automatic dependency updates |
+
+### Validation Jobs
+
+`.github/workflows/dotnet-release.yml` validates on two runners, and a release is only created when both are green:
+
+| Job | Runner | Scope |
+|-----|--------|-------|
+| 🔨 Build & Test | `windows-latest` | the whole solution (`BAUERGROUP.Shared.slnx`), including the Windows-only `-windows` TFMs and code coverage |
+| 🐧 Build & Test (Linux, Avalonia) | `ubuntu-latest` | `tests/BAUERGROUP.Shared.Avalonia.Test` only |
+
+The Linux job runs the Avalonia test project — headless Avalonia, `net10.0` and `net8.0` — so a regression that only shows on Linux blocks the release instead of reaching the published package. It deliberately points at the single test `.csproj` rather than the solution: building the solution on Linux would drag in CefSharp, Stimulsoft and the `-windows` test assembly for nothing.
+
+To reproduce it locally:
+
+```bash
+dotnet test tests/BAUERGROUP.Shared.Avalonia.Test -c Release
+```
 
 ### Conventional Commits
 
@@ -248,6 +267,9 @@ dotnet build
 
 ```bash
 # Build test project directly
-dotnet build tests/BAUERGROUP.Shared.Tests/BAUERGROUP.Shared.Tests.csproj
-dotnet test tests/BAUERGROUP.Shared.Tests/BAUERGROUP.Shared.Tests.csproj -v detailed
+dotnet build tests/BAUERGROUP.Shared.Test/BAUERGROUP.Shared.Test.csproj
+dotnet test tests/BAUERGROUP.Shared.Test/BAUERGROUP.Shared.Test.csproj -v detailed
+
+# The Avalonia (headless UI) tests are a separate project
+dotnet test tests/BAUERGROUP.Shared.Avalonia.Test/BAUERGROUP.Shared.Avalonia.Test.csproj -v detailed
 ```

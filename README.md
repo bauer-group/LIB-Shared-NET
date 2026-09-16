@@ -23,6 +23,7 @@ The BAUER GROUP Shared Libraries form a modular, multi-project solution designed
 - **API Integrations**: Generic REST API client with RestSharp
 - **Cloud Services**: Cloudinary media management, RemoveBG background removal, Fixer.io currency exchange
 - **Desktop Components**: WPF/WinForms utilities with embedded Chromium browser support
+- **Cross-Platform UI**: Avalonia components for Windows, Linux and macOS, including an embeddable live log viewer
 - **Reporting**: Stimulsoft Reports integration for professional reporting
 
 ---
@@ -35,6 +36,7 @@ The BAUER GROUP Shared Libraries form a modular, multi-project solution designed
 | `BAUERGROUP.Shared.Data` | net10.0, net8.0, netstandard2.0 | Data persistence: SQLite key-value storage, LiteDB, in-memory database (NMemory) |
 | `BAUERGROUP.Shared.API` | net10.0, net8.0, netstandard2.0 | Generic REST API client (RestSharp) with JSON serialization |
 | `BAUERGROUP.Shared.Cloud` | net10.0, net8.0 | Cloud services: Cloudinary, RemoveBG, Fixer.io currency exchange |
+| `BAUERGROUP.Shared.Avalonia` | net10.0, net8.0 | Cross-platform Avalonia UI components (Windows, Linux, macOS), including an embeddable live log viewer |
 | `BAUERGROUP.Shared.Desktop` | net10.0-windows, net8.0-windows | WPF/WinForms utilities, behaviors, reactive extensions |
 | `BAUERGROUP.Shared.Desktop.Browser` | net10.0-windows, net8.0-windows | Embedded Chromium browser (CefSharp) and WebView2 for WPF |
 | `BAUERGROUP.Shared.Desktop.Reporting` | net10.0-windows, net8.0-windows | Stimulsoft Reports integration* |
@@ -55,6 +57,7 @@ Install-Package BAUERGROUP.Shared.Core
 Install-Package BAUERGROUP.Shared.Data
 Install-Package BAUERGROUP.Shared.API
 Install-Package BAUERGROUP.Shared.Cloud
+Install-Package BAUERGROUP.Shared.Avalonia
 Install-Package BAUERGROUP.Shared.Desktop
 Install-Package BAUERGROUP.Shared.Desktop.Browser
 Install-Package BAUERGROUP.Shared.Desktop.Reporting
@@ -64,6 +67,9 @@ Install-Package BAUERGROUP.Shared.Desktop.Reporting
 
 ```bash
 dotnet add package BAUERGROUP.Shared.Core
+
+# Cross-platform Avalonia UI components (optional)
+dotnet add package BAUERGROUP.Shared.Avalonia
 ```
 
 ---
@@ -95,6 +101,87 @@ BGLogger.Error(exception, "An error occurred");
 
 // Enable automatic unhandled exception reporting
 BGLogger.UnhandledExceptionReporting(true);
+```
+
+### Live Log Viewer (Avalonia)
+
+`BAUERGROUP.Shared.Avalonia` shows the running process's own log events — no UDP socket, no log file to tail. The viewer registers an in-process live sink while it is visible and removes it again when it is hidden or closed, so a diagnostics pane costs nothing while it is closed.
+
+**F12 window** — `LogViewerWindow.Toggle` opens a log window owned by the given window, or closes the one it already owns:
+
+```csharp
+using Avalonia.Controls;
+using Avalonia.Input;
+using BAUERGROUP.Shared.Avalonia.Logging;
+
+public class MainWindow : Window
+{
+    protected override void OnKeyDown(KeyEventArgs e)
+    {
+        if (e.Key == Key.F12)
+        {
+            e.Handled = true;
+            LogViewerWindow.Toggle(this, "Diagnostics");
+            return;
+        }
+
+        base.OnKeyDown(e);
+    }
+}
+```
+
+**Embedded pane** — drop the control anywhere in your XAML:
+
+```xml
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:logging="clr-namespace:BAUERGROUP.Shared.Avalonia.Logging;assembly=BAUERGROUP.Shared.Avalonia">
+  <!-- Captures only while visible: binding IsVisible to a "show log" toggle removes the sink again. -->
+  <logging:LogViewer MaxLines="10000" ShowToolbar="True" AutoScroll="True" />
+</UserControl>
+```
+
+`MinimumLevel` (default `LogLevel.Trace`) is the capture level and is set from code-behind:
+
+```csharp
+viewer.MinimumLevel = NLog.LogLevel.Info;   // raise it in chatty processes
+```
+
+The viewer uses the host application's theme (for example `FluentTheme`) and needs no theme reference of its own.
+
+**Custom UI** — `BGLogViewBuffer` is the same bounded, thread-safe buffer the viewers use, and is available from `BAUERGROUP.Shared.Core` alone:
+
+```csharp
+using BAUERGROUP.Shared.Core.Logging;
+using NLog;
+using System.Collections.Generic;
+
+List<BGLogRecord> lines = new List<BGLogRecord>();   // the list your view is bound to
+
+using var buffer = new BGLogViewBuffer(maxLines: 5000, minimumLevel: LogLevel.Info);
+buffer.Attach();                      // registers the live sink; Detach()/Dispose() removes it
+
+// On the thread that owns your view, e.g. from a timer:
+BGLogViewUpdate update = buffer.Drain();
+
+if (update.IsReset)
+    lines.Clear();
+else if (update.RemoveFromStart > 0)
+    lines.RemoveRange(0, update.RemoveFromStart);
+
+foreach (BGLogRecord record in update.Added)
+    lines.Add(record);                // record.DisplayText is "HH:mm:ss.fff LEVEL message"
+```
+
+For a source that is not a list view, register a callback directly:
+
+```csharp
+// The callback runs on the logging thread inside NLog's target lock: it must return immediately
+// and must not block, must not log, and must not dispose the registration it belongs to.
+using IDisposable registration = BGLogger.Configuration.AddLiveSink(record => queue.Enqueue(record),
+                                                                    LogLevel.Info);
+
+int openSinks = BGLogger.Configuration.LiveSinkCount;   // 0 means no live target is configured
 ```
 
 ### Data Persistence with SQLite
@@ -156,6 +243,7 @@ await WPFToolboxBrowser.MakeWebsiteScreenshot(
 
 - **.NET 10.0**, **.NET 8.0**, or **.NET Standard 2.0** compatible runtime
 - **Windows** (for Desktop packages: `Desktop`, `Desktop.Browser`, `Desktop.Reporting`)
+- **Windows, Linux (X11/Wayland) or macOS** for `BAUERGROUP.Shared.Avalonia` — it targets plain `net10.0`/`net8.0` and needs no `-windows` TFM
 
 ### Optional Requirements
 
@@ -173,10 +261,12 @@ BAUERGROUP.Shared/
 │   ├── BAUERGROUP.Shared.Data/                 # Data persistence layer
 │   ├── BAUERGROUP.Shared.API/                  # Generic REST API client
 │   ├── BAUERGROUP.Shared.Cloud/                # Cloud service integrations
+│   ├── BAUERGROUP.Shared.Avalonia/             # Cross-platform UI (live log viewer)
 │   ├── BAUERGROUP.Shared.Desktop/              # WPF/WinForms utilities
 │   ├── BAUERGROUP.Shared.Desktop.Browser/      # Embedded browser
 │   └── BAUERGROUP.Shared.Desktop.Reporting/    # Reporting components
 ├── tests/
+│   ├── BAUERGROUP.Shared.Avalonia.Test/        # Avalonia headless UI tests
 │   └── BAUERGROUP.Shared.Test/                 # Unit tests
 ├── assets/                                     # Application icons
 ├── docs/
@@ -238,13 +328,20 @@ The library uses NLog for logging. Configuration is done programmatically via `B
 BGLogger.Configuration.File = true;           // File logging (default: enabled)
 BGLogger.Configuration.Console = true;        // Console output
 BGLogger.Configuration.ConsoleColored = true; // Colored console output
-BGLogger.Configuration.Network = true;        // UDP network logging
+BGLogger.Configuration.Network = true;        // NLog Network target (UDP)
 BGLogger.Configuration.NLogViewer = true;     // NLog Viewer (Log4J XML format)
 BGLogger.Configuration.Memory = true;         // In-memory log storage
 BGLogger.Configuration.Debugger = true;       // VS Debugger output
 BGLogger.Configuration.Eventlog = true;       // Windows Event Log (.NET only)
 BGLogger.Configuration.ErrorTracking = true;  // Sentry integration
+
+// In-process live sink: hands every event to a callback in the same process.
+// Reference counted - the "LIVE" target and its rule exist only while a sink is registered.
+using IDisposable liveSink = BGLogger.Configuration.AddLiveSink(record => Show(record.DisplayText));
+int openSinks = BGLogger.Configuration.LiveSinkCount;
 ```
+
+The live sink is what the log viewers are built on — see [Live Log Viewer (Avalonia)](#live-log-viewer-avalonia) above, and `WPFToolbox.LogMessageReceiverWindow()` in `BAUERGROUP.Shared.Desktop` for WPF. It replaces the UDP round trip the old viewer used: `BGLoggerNetworkListener` and `TextBoxTraceListener` are `[Obsolete]` and will be removed in the next major version.
 
 ### Sentry Integration
 
@@ -302,6 +399,7 @@ This project uses various open-source packages. See [DEPENDENCY-LICENSES.md](doc
 | Package | License | Notes |
 |---------|---------|-------|
 | NLog | BSD 3-Clause | Logging framework |
+| Avalonia | MIT | Cross-platform UI framework |
 | CefSharp | BSD 3-Clause | Chromium browser |
 | Sentry | MIT | Error tracking |
 | Stimulsoft | Proprietary | Requires separate license |

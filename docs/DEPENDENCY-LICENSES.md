@@ -14,9 +14,9 @@ This document lists the NuGet packages referenced in `Directory.Packages.props` 
 
 | License Type | Count | Compatible with MIT? | Notes |
 |-------------|-------|---------------------|-------|
-| MIT | 23 | ✅ Yes | Permissive, no restrictions |
+| MIT | 26 | ✅ Yes | Permissive, no restrictions |
 | BSD 2-Clause/3-Clause | 14 | ✅ Yes | Permissive |
-| Apache 2.0 | 4 | ✅ Yes | Permissive, requires attribution |
+| Apache 2.0 | 5 | ✅ Yes | Permissive, requires attribution |
 | MS-PL OR Apache 2.0 | 1 | ✅ Yes | CsvHelper (dual licensed) |
 | Proprietary | 2 | ⚠️ Conditional | Stimulsoft - requires own license |
 
@@ -88,6 +88,16 @@ All dependencies are permissive (MIT, BSD, Apache 2.0) except Stimulsoft, which 
 |---------|---------|---------|---------------|
 | System.Reactive | 6.1.0 | MIT | ✅ Compatible |
 
+### Cross-Platform Desktop (Avalonia)
+
+| Package | Version | License | Compatibility |
+|---------|---------|---------|---------------|
+| Avalonia | 12.1.2 | MIT | ✅ Compatible |
+
+**Transitive (via Avalonia):** Avalonia.Remote.Protocol 12.1.2, Avalonia.BuildServices 11.3.2 and MicroCom.Runtime 0.11.6 — all MIT.
+
+`BAUERGROUP.Shared.Avalonia` references no theme package: the viewer uses the theme of the host application. `Avalonia.Themes.Fluent` is referenced by the test project only (see Testing below).
+
 ### Windows Desktop (WPF/WinForms)
 
 | Package | Version | License | Compatibility |
@@ -146,10 +156,17 @@ Stimulsoft 2022.1.2 brings in System.Data.SqlClient 4.7.0 (MIT) transitively, wh
 |---------|---------|---------|---------------|
 | Microsoft.NET.Test.Sdk | 18.6.0 | MIT | ✅ Compatible |
 | xunit | 2.9.3 | Apache 2.0 | ✅ Compatible |
+| xunit.v3 | 3.2.2 | Apache 2.0 | ✅ Compatible |
 | xunit.runner.visualstudio | 3.1.5 | Apache 2.0 | ✅ Compatible |
 | coverlet.collector | 10.0.1 | MIT | ✅ Compatible |
 | AwesomeAssertions | 9.6.0 | Apache 2.0 | ✅ Compatible |
 | Moq | 4.20.72 | BSD 3-Clause | ✅ Compatible |
+| Avalonia.Headless.XUnit | 12.1.2 | MIT | ✅ Compatible |
+| Avalonia.Themes.Fluent | 12.1.2 | MIT | ✅ Compatible |
+
+**Transitive (via Avalonia.Headless.XUnit):** Avalonia.Headless 12.1.2 (MIT) and xunit.v3.extensibility.core 3.2.2 (Apache 2.0).
+
+`xunit` (2.9.3) and `xunit.v3` are separate package ids and coexist: `tests/BAUERGROUP.Shared.Test` uses xunit 2, `tests/BAUERGROUP.Shared.Avalonia.Test` uses xunit.v3, which `Avalonia.Headless.XUnit` requires. xunit.v3 is pinned to 3.x — see `.github/dependabot.yml`.
 
 ### Build / Source Link
 
