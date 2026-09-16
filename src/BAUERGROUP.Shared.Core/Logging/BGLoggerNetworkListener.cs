@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 
 namespace BAUERGROUP.Shared.Core.Logging
 {
+    [Obsolete("Superseded by BGLogger.Configuration.AddLiveSink / BGLogViewBuffer (in-process, no UDP socket). " +
+              "This type will be removed in a future major version.")]
     public class BGLoggerNetworkListener : PropertyChangedBase, IDisposable
     {
         private CancellationTokenSource _cts;
