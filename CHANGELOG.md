@@ -4,6 +4,41 @@ All notable changes to this project are documented here. This file is maintained
 automatically by [semantic-release](https://github.com/semantic-release/semantic-release)
 on every release to `main`.
 
+## [4.0.0](https://github.com/bauer-group/LIB-Shared-NET/compare/v3.1.0...v4.0.0) (2026-09-16)
+
+### ⚠ BREAKING CHANGES
+
+* **data:** BAUERGROUP.Shared.Data no longer brings in
+  SQLitePCLRaw.bundle_e_sqlcipher. Applications that open encrypted
+  SQLite databases through it must reference an encryption provider
+  themselves (e.g. SQLite3 Multiple Ciphers or a licensed SQLCipher
+  build). Applications targeting .NET Framework through the
+  netstandard2.0 build now need .NET Framework 4.7.1 or later
+  (SQLitePCLRaw 3 requirement).
+* **desktop:** BAUERGROUP.Shared.Desktop no longer brings in
+  ReactiveUI, Splat or Splat.NLog. Applications that use them must add
+  their own PackageReference.
+
+### deps
+
+* **data:** removed the SQLCipher bundle from Shared.Data ([502c28a](https://github.com/bauer-group/LIB-Shared-NET/commit/502c28a50f745d6b97a584238d153f8419e39113))
+* **desktop:** removed unused ReactiveUI and Splat references ([ce9d992](https://github.com/bauer-group/LIB-Shared-NET/commit/ce9d9924427b6fc580fc795e7077c52bfa0ec1e7))
+
+### 🚀 Features
+
+* **avalonia:** added a cross-platform live log viewer package ([500405e](https://github.com/bauer-group/LIB-Shared-NET/commit/500405e0fc15dcaaf6acbd4164819f02072d3950)), references [#136](https://github.com/bauer-group/LIB-Shared-NET/issues/136)
+* **logging:** added an in-process live log sink and view buffer ([16daa65](https://github.com/bauer-group/LIB-Shared-NET/commit/16daa65371621098b86ed9b9bf1f842b57d89138)), references [#136](https://github.com/bauer-group/LIB-Shared-NET/issues/136)
+
+### 🐛 Bug Fixes
+
+* **ci:** pinned the Linux validation job to net10.0 ([8620f0e](https://github.com/bauer-group/LIB-Shared-NET/commit/8620f0e29cf0293249158a834f0737fdac54b6be))
+* **desktop:** rebuilt the log viewer on the in-process live sink ([95e9736](https://github.com/bauer-group/LIB-Shared-NET/commit/95e9736e1c06b9615dc2b037b1ca8e622d36dcf0)), references [#136](https://github.com/bauer-group/LIB-Shared-NET/issues/136)
+* **desktop:** restored the missing window icon resource ([73a546d](https://github.com/bauer-group/LIB-Shared-NET/commit/73a546dcae4419738cc1c3a0d9d4048e351a3fb2))
+
+### ♻️ Code Refactoring
+
+* **logging:** deprecated the UDP log listener and trace listener ([334de66](https://github.com/bauer-group/LIB-Shared-NET/commit/334de66bc1b34454d3f931ebf86bfb827ac5b2d5)), references [#136](https://github.com/bauer-group/LIB-Shared-NET/issues/136)
+
 ## [3.1.0](https://github.com/bauer-group/LIB-Shared-NET/compare/v3.0.8...v3.1.0) (2026-09-15)
 
 ### 🚀 Features
