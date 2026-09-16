@@ -9,6 +9,8 @@ namespace BAUERGROUP.Shared.Desktop.Logging;
 /// <summary>
 /// Trace listener that writes messages to a WPF TextBox.
 /// </summary>
+[Obsolete("Unused, and blocks the writing thread through Dispatcher.Invoke. Use LogMessageReceiverControl or " +
+          "BGLogger.Configuration.AddLiveSink / BGLogViewBuffer. This type will be removed in a future major version.")]
 public class TextBoxTraceListener : TraceListener
 {
     private readonly WpfTextBox _target;
