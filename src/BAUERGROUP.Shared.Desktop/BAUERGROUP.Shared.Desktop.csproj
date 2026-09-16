@@ -8,6 +8,12 @@
     <Description>Windows Presentation Foundation (WPF) infrastructure including UI helpers, dialog management, Windows services integration, and printing support.</Description>
   </PropertyGroup>
 
+  <!-- WPF resource behind "/BAUERGROUP.Shared.Desktop;component/Images/Application.ico",
+       used as the window icon by this package and by Desktop.Browser -->
+  <ItemGroup>
+    <Resource Include="..\BAUERGROUP.Shared.Core\Images\Application.ico" Link="Images\Application.ico" />
+  </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" />
     <PackageReference Include="Microsoft.Win32.SystemEvents" />
