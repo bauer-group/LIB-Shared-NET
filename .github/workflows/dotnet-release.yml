@@ -65,7 +65,35 @@ jobs:
       collect-coverage: true
       # Windows runner for tests (Windows-specific tests need Windows)
       runs-on: "windows-latest"
+      # LogFilePrefix instead of the default LogFileName: a fixed name makes every test
+      # assembly (both TFMs of both test projects) overwrite the same trx.
+      test-logger: "trx;LogFilePrefix=test-results"
       # SNK path must match AssemblyOriginatorKeyFile in Directory.Build.props
+      snk-file-path: "build/BAUERGROUP.Shared.snk"
+    secrets: inherit
+
+  # ============================================
+  # Linux Validation (Avalonia package, headless)
+  # ============================================
+  validate-linux:
+    name: 🐧 Build & Test (Linux, Avalonia)
+    uses: bauer-group/automation-templates/.github/workflows/dotnet-build.yml@main
+    with:
+      # Test csproj only - never the slnx: that would run the net*-windows test assembly
+      # on Linux and build CefSharp and Stimulsoft for nothing.
+      project-path: "tests/BAUERGROUP.Shared.Avalonia.Test/BAUERGROUP.Shared.Avalonia.Test.csproj"
+      # 10.0.x SDK only: ubuntu-24.04 ships the 8.0 runtime, so the net8.0 test
+      # assembly runs without a second setup-dotnet.
+      dotnet-version: "10.0.x"
+      runs-on: "ubuntu-latest"
+      run-tests: true
+      collect-coverage: false
+      # A `uses:` job cannot declare timeout-minutes itself - the reusable workflow
+      # takes it as an input.
+      timeout-minutes: 20
+      test-logger: "trx;LogFilePrefix=test-results"
+      # Signs when the secret is available; degrades to a warning otherwise. The test
+      # project has no keyed InternalsVisibleTo, so it also builds unsigned (no CS0281).
       snk-file-path: "build/BAUERGROUP.Shared.snk"
     secrets: inherit
 
@@ -74,7 +102,7 @@ jobs:
   # ============================================
   release:
     name: 📦 Create Release
-    needs: validate
+    needs: [validate, validate-linux]
     if: |
       (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
       github.event_name == 'workflow_dispatch'
@@ -125,7 +153,7 @@ jobs:
   # ============================================
   pr-validate:
     name: 📋 Validate Package (PR)
-    needs: validate
+    needs: [validate, validate-linux]
     if: github.event_name == 'pull_request'
     uses: bauer-group/automation-templates/.github/workflows/dotnet-publish-library.yml@main
     with:

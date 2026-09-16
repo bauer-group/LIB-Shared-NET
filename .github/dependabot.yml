@@ -27,6 +27,9 @@ updates:
         patterns:
           - "Microsoft.*"
           - "System.*"
+      avalonia:
+        patterns:
+          - "Avalonia*"
       testing:
         patterns:
           - "xunit*"
@@ -39,6 +42,11 @@ updates:
     ignore:
       - dependency-name: "Stimulsoft.Dashboards.Win"
       - dependency-name: "Stimulsoft.Reports.Wpf"
+      # xunit.v3 must stay on 3.x: Avalonia.Headless.XUnit 12.1.2 fails discovery on 4.x
+      # (MissingMethodException) and 4.x forces Microsoft.Testing.Platform, which breaks
+      # "dotnet test" over the solution on the .NET 10 SDK.
+      - dependency-name: "xunit.v3"
+        update-types: ["version-update:semver-major"]
 
   # GitHub Actions
   - package-ecosystem: "github-actions"
