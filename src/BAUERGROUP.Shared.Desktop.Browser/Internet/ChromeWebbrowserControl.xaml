@@ -11,6 +11,13 @@
              xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
              mc:Ignorable="d"
              d:DesignHeight="600" d:DesignWidth="800">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/BAUERGROUP.Shared.Desktop.Browser;component/Internet/BrowserIcons.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition />
@@ -27,20 +34,17 @@
             </Grid>
         </Grid>
         <Button x:Name="closeButton" Content="Schließen" Margin="0,0,10,10" Grid.Row="2" VerticalAlignment="Bottom" Height="25" HorizontalAlignment="Right" Width="75" Click="ButtonClose_Click" />
-        <Button x:Name="navigateBackButton" Margin="10,0,0,10" Grid.Row="2" VerticalAlignment="Bottom" Height="25" HorizontalAlignment="Left" Width="25" Command="{Binding WebBrowser.BackCommand, ElementName=mainBrowser}" Background="#FFD4D0C8">
-            <StackPanel>
-                <Image Source="/BAUERGROUP.Shared.Desktop;component/Images/Internet/EmbeddedBrowser/ArrowBack_16.png"/>
-            </StackPanel>
+        <Button x:Name="navigateBackButton" Margin="10,0,0,10" Grid.Row="2" VerticalAlignment="Bottom" Height="25" HorizontalAlignment="Left" Width="25" Command="{Binding WebBrowser.BackCommand, ElementName=mainBrowser}">
+            <Path Data="{StaticResource BrowserIconBack}" Stretch="None" Width="16" Height="16"
+                  Fill="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
         </Button>
         <Button x:Name="navigateForwardButton" Margin="40,0,0,10" Grid.Row="2" VerticalAlignment="Bottom" Height="25" HorizontalAlignment="Left" Width="25" Command="{Binding WebBrowser.ForwardCommand, ElementName=mainBrowser}">
-            <StackPanel>
-                <Image Source="/BAUERGROUP.Shared.Desktop;component/Images/Internet/EmbeddedBrowser/ArrowForward_16.png"/>
-            </StackPanel>
+            <Path Data="{StaticResource BrowserIconForward}" Stretch="None" Width="16" Height="16"
+                  Fill="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
         </Button>
         <Button x:Name="reloadButton" Margin="80,0,0,10" Grid.Row="2" VerticalAlignment="Bottom" Height="25" HorizontalAlignment="Left" Width="25" Command="{Binding WebBrowser.ReloadCommand, ElementName=mainBrowser}">
-            <StackPanel>
-                <Image Source="/BAUERGROUP.Shared.Desktop;component/Images/Internet/EmbeddedBrowser/ArrowLoad_16.png"/>
-            </StackPanel>
+            <Path Data="{StaticResource BrowserIconReload}" Stretch="None" Width="16" Height="16"
+                  Fill="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
         </Button>
         <TextBox x:Name="urlTextBox" Margin="160,0,102,10" Grid.Row="2" Height="23" VerticalAlignment="Bottom" Text="{Binding Address, ElementName=mainBrowser}" GotFocus="urlTextBox_GotFocus" PreviewMouseDown="urlTextBox_PreviewMouseDown">
             <behaviors:Interaction.Behaviors>
@@ -48,9 +52,8 @@
             </behaviors:Interaction.Behaviors>
         </TextBox>
         <Button x:Name="printButton" Margin="120,0,0,10" Grid.Row="2" VerticalAlignment="Bottom" Height="25" HorizontalAlignment="Left" Width="25" Command="{Binding WebBrowser.PrintCommand, ElementName=mainBrowser}">
-            <StackPanel>
-                <Image Source="/BAUERGROUP.Shared.Desktop;component/Images/Internet/EmbeddedBrowser/Print_16.png"/>
-            </StackPanel>
+            <Path Data="{StaticResource BrowserIconPrint}" Stretch="None" Width="16" Height="16"
+                  Fill="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
         </Button>
         <!--
         <TextBlock HorizontalAlignment="Right" TextAlignment="Right" Grid.Column="3" VerticalAlignment="Center">

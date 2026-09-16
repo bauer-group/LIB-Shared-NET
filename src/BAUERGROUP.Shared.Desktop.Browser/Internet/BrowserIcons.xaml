@@ -1,0 +1,48 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!--
+        Toolbar glyphs for the embedded browser controls.
+
+        Every geometry is authored on the same 16x16 grid and is rendered with
+        Stretch="None", so all five icons share one scale and stay inside one size band.
+        They replace PNG resources that the controls referenced but that never existed
+        in the repository, which also keeps the controls free of binary assets.
+    -->
+
+    <!-- Back: left pointing arrow with a shaft. -->
+    <PathGeometry x:Key="BrowserIconBack"
+                  FillRule="Nonzero"
+                  Figures="M 7,3 L 2,8 L 7,13 L 7,9.6 L 13.5,9.6 L 13.5,6.4 L 7,6.4 Z" />
+
+    <!-- Forward: the back arrow mirrored about the vertical centre line. -->
+    <PathGeometry x:Key="BrowserIconForward"
+                  FillRule="Nonzero"
+                  Figures="M 9,3 L 14,8 L 9,13 L 9,9.6 L 2.5,9.6 L 2.5,6.4 L 9,6.4 Z" />
+
+    <!-- Reload: a 270 degree ring with a clockwise arrow head in the open quadrant. -->
+    <PathGeometry x:Key="BrowserIconReload"
+                  FillRule="Nonzero"
+                  Figures="M 8,2 A 6,6 0 1 0 14,8 L 11.8,8 A 3.8,3.8 0 1 1 8,4.2 L 8,5.4 L 12.2,3.2 L 8,1 Z" />
+
+    <!-- Browse: a double chevron, the usual "go to the typed address" glyph. -->
+    <PathGeometry x:Key="BrowserIconBrowse"
+                  FillRule="Nonzero"
+                  Figures="M 2.6,3.5 L 7.1,8 L 2.6,12.5 L 4.6,12.5 L 9.1,8 L 4.6,3.5 Z
+                           M 7.2,3.5 L 11.7,8 L 7.2,12.5 L 9.2,12.5 L 13.7,8 L 9.2,3.5 Z" />
+
+    <!--
+        Print: sheet in, printer body, sheet out. The status indicator and the paper
+        slot are punched out of the body by the even-odd rule; the slot also keeps the
+        body and the emerging sheet from reading as one block. Kept deliberately lean
+        so the printer does not outweigh the four arrows beside it in the toolbar.
+    -->
+    <PathGeometry x:Key="BrowserIconPrint"
+                  FillRule="EvenOdd"
+                  Figures="M 4.5,2.5 H 11.5 V 5 H 4.5 Z
+                           M 2.5,5.5 H 13.5 V 10 H 2.5 Z
+                           M 10.9,6.4 H 12.5 V 7.7 H 10.9 Z
+                           M 4.9,8.6 H 11.1 V 9.5 H 4.9 Z
+                           M 5,10 H 11 V 13.5 H 5 Z" />
+
+</ResourceDictionary>
