@@ -58,10 +58,13 @@ namespace BAUERGROUP.Shared.Desktop.Logging
         /// </summary>
         public LogMessageReceiverControl()
         {
-            InitializeComponent();
-
+            // Before InitializeComponent: a style or XAML assignment to MaxLines/MinimumLevel during
+            // initialization reaches the property-changed handlers, which forward to the buffer.
             _buffer = new BGLogViewBuffer(MaxLines, MinimumLevel);
             _lines = new LogRecordCollection();
+
+            InitializeComponent();
+
             PART_List.ItemsSource = _lines;
 
             _timer = new DispatcherTimer(DispatcherPriority.Background, Dispatcher)
@@ -123,12 +126,16 @@ namespace BAUERGROUP.Shared.Desktop.Logging
 
         private static void OnMaxLinesChanged(DependencyObject target, DependencyPropertyChangedEventArgs e)
         {
-            ((LogMessageReceiverControl)target)._buffer.MaxLines = (int)e.NewValue;
+            var buffer = ((LogMessageReceiverControl)target)._buffer;
+            if (buffer != null)
+                buffer.MaxLines = (int)e.NewValue;
         }
 
         private static void OnMinimumLevelChanged(DependencyObject target, DependencyPropertyChangedEventArgs e)
         {
-            ((LogMessageReceiverControl)target)._buffer.MinimumLevel = (LogLevel)e.NewValue;
+            var buffer = ((LogMessageReceiverControl)target)._buffer;
+            if (buffer != null)
+                buffer.MinimumLevel = (LogLevel)e.NewValue;
         }
 
         private static void OnAutoScrollChanged(DependencyObject target, DependencyPropertyChangedEventArgs e)
