@@ -4,6 +4,13 @@ All notable changes to this project are documented here. This file is maintained
 automatically by [semantic-release](https://github.com/semantic-release/semantic-release)
 on every release to `main`.
 
+## [4.0.1](https://github.com/bauer-group/LIB-Shared-NET/compare/v4.0.0...v4.0.1) (2026-09-16)
+
+### 🐛 Bug Fixes
+
+* **build:** made InternalsVisibleTo work in unsigned builds ([42d6761](https://github.com/bauer-group/LIB-Shared-NET/commit/42d676131497306622f8d7f257af8dd6ee382e49))
+* **security:** lifted the vulnerable SqlClient from Stimulsoft ([9b620a0](https://github.com/bauer-group/LIB-Shared-NET/commit/9b620a058525a8d5b503244eb239e4a6c4c5d864))
+
 ## [4.0.0](https://github.com/bauer-group/LIB-Shared-NET/compare/v3.1.0...v4.0.0) (2026-09-16)
 
 ### ⚠ BREAKING CHANGES
