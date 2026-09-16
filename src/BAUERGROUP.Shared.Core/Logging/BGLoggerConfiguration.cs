@@ -480,7 +480,9 @@ namespace BAUERGROUP.Shared.Core.Logging
             Targets = new LoggingConfiguration();
 
             TargetFile = new FileTarget();
-            TargetFile.Layout = @"${longdate::universalTime=true} - ${level:uppercase=true}: ${message}${onexception:${newline}EXCEPTION DETAILS\:${newline}${exception:format=ToString}}";
+            // One colon after the renderer name: NLog reads "${longdate::...}" as an empty default property
+            // and rejects the whole layout as soon as an application turns LogManager.ThrowExceptions on.
+            TargetFile.Layout = @"${longdate:universalTime=true} - ${level:uppercase=true}: ${message}${onexception:${newline}EXCEPTION DETAILS\:${newline}${exception:format=ToString}}";
             // ${dir-separator} instead of a literal backslash, which is a file name character on Linux/macOS
             TargetFile.FileName = "${gdc:item=LogDirectory}${dir-separator}${gdc:item=ApplicationName}.log";
             TargetFile.KeepFileOpen = true;

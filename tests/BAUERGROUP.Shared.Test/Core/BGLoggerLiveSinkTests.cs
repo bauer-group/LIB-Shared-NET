@@ -384,6 +384,11 @@ public class BGLoggerLiveSinkTests
     [Fact]
     public void AddLiveSink_WhenReconfigurationFails_ShouldLeaveNoTargetOrRuleBehind()
     {
+        // Initialize BGLogger BEFORE turning exceptions on: its static constructor builds the whole
+        // configuration, and anything NLog would only warn about becomes a cached TypeInitializationException
+        // that fails every later test in this collection instead of just this one.
+        _ = BGLogger.Configuration;
+
         var throwExceptions = LogManager.ThrowExceptions;
         var broken = new FailingTarget { Name = "BROKEN" };
         var brokenRule = new LoggingRule("*", LogLevel.Fatal, broken);

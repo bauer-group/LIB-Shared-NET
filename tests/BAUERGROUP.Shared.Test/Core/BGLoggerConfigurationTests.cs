@@ -1,6 +1,7 @@
 using System.Globalization;
 using BAUERGROUP.Shared.Core.Logging;
 using NLog;
+using NLog.Layouts;
 using NLog.Targets;
 
 namespace BAUERGROUP.Shared.Test.Core;
@@ -57,6 +58,30 @@ public class BGLoggerConfigurationTests
 
         // Without {0} a second archive of the same day is appended to the existing file
         target.ArchiveSuffixFormat.Should().Contain("{0");
+    }
+
+    [Fact]
+    public void FileTarget_Layout_ShouldParseWhileNLogThrowsConfigurationExceptions()
+    {
+        var target = GetFileTarget();
+        var throwExceptions = LogManager.ThrowExceptions;
+
+        try
+        {
+            // A doubled colon after a renderer name ("${longdate::universalTime=true}") renders fine but is
+            // rejected outright once an application turns exceptions on. Every other target reuses this
+            // layout, so the parse happens inside InitializeTargets - that is, inside the BGLogger static
+            // constructor, whose TypeInitializationException is cached: logging is then dead process-wide.
+            LogManager.ThrowExceptions = true;
+
+            Action act = () => Layout.FromString(target.Layout.ToString()!);
+
+            act.Should().NotThrow();
+        }
+        finally
+        {
+            LogManager.ThrowExceptions = throwExceptions;
+        }
     }
 
     // NLog 6 formats the suffix as string.Format(format, sequenceNumber, archiveDate)
