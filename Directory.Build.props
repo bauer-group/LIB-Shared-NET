@@ -31,6 +31,8 @@
     <!-- Assembly Signing -->
     <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)build\BAUERGROUP.Shared.snk</AssemblyOriginatorKeyFile>
     <SignAssembly Condition="Exists('$(AssemblyOriginatorKeyFile)')">true</SignAssembly>
+    <!-- Public key of build\BAUERGROUP.Shared.snk, for keyed InternalsVisibleTo in signed builds -->
+    <AssemblyPublicKey>002400000480000094000000060200000024000052534131000400000100010049be2a8f330f23c204cdc73b38f4ca4818aafc7b80679227615b8d4c90f07ead1ec8d481da401ab8767902b19ace9bcfb11d7a6175c5ac1c0cfb69642509e815ccc600ce85f07b4eafdf95a439c59aec89fa0a72a1e129d9ba86a5ad9b6f33c5b06fd8ce12e16aca7f0adb5e8b764fda8d89cc36b31d6c871f494036f1aed2b2</AssemblyPublicKey>
     <!-- Build Configuration -->
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);CS1591;NETSDK1206</NoWarn>
