@@ -6,6 +6,7 @@
   </Configurations>
   <Folder Name="/src/">
     <Project Path="src/BAUERGROUP.Shared.API/BAUERGROUP.Shared.API.csproj" />
+    <Project Path="src/BAUERGROUP.Shared.Avalonia/BAUERGROUP.Shared.Avalonia.csproj" />
     <Project Path="src/BAUERGROUP.Shared.Cloud/BAUERGROUP.Shared.Cloud.csproj" />
     <Project Path="src/BAUERGROUP.Shared.Core/BAUERGROUP.Shared.Core.csproj" />
     <Project Path="src/BAUERGROUP.Shared.Data/BAUERGROUP.Shared.Data.csproj" />
@@ -17,6 +18,7 @@
     <Project Path="src/BAUERGROUP.Shared.Desktop/BAUERGROUP.Shared.Desktop.csproj" />
   </Folder>
   <Folder Name="/tests/">
+    <Project Path="tests/BAUERGROUP.Shared.Avalonia.Test/BAUERGROUP.Shared.Avalonia.Test.csproj" />
     <Project Path="tests/BAUERGROUP.Shared.Test/BAUERGROUP.Shared.Test.csproj" />
   </Folder>
 </Solution>

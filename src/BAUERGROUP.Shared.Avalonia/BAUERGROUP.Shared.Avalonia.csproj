@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- Avalonia 12 ships net8.0/net10.0 only and needs no -windows TFM:
+         runs on Windows, Linux (X11/Wayland) and macOS. -->
+    <TargetFrameworks>net10.0;net8.0</TargetFrameworks>
+    <PackageId>BAUERGROUP.Shared.Avalonia</PackageId>
+    <Description>Cross-platform Avalonia UI components for Windows, Linux (X11/Wayland) and macOS, including an embeddable live log viewer for BGLogger.</Description>
+    <!-- Directory.Build.props sets ApplicationIcon for every project; Avalonia would otherwise embed it
+         into this library as !__AvaloniaDefaultWindowIcon. -->
+    <AvaloniaIncludeApplicationIconAsWindowIcon>false</AvaloniaIncludeApplicationIconAsWindowIcon>
+    <!-- Generate the x:Name accessors but not InitializeComponent: the generated one is public, and a
+         consumer calling it again would reload the XAML and drop the wiring the code-behind does once.
+         The code-behind declares a private InitializeComponent instead. -->
+    <AvaloniaNameGeneratorBehavior>OnlyProperties</AvaloniaNameGeneratorBehavior>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BAUERGROUP.Shared.Core\BAUERGROUP.Shared.Core.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,66 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:BAUERGROUP.Shared.Avalonia.Logging"
+             xmlns:core="clr-namespace:BAUERGROUP.Shared.Core.Logging;assembly=BAUERGROUP.Shared.Core"
+             x:Class="BAUERGROUP.Shared.Avalonia.Logging.LogViewer"
+             x:DataType="local:LogViewer"
+             FontFamily="Cascadia Mono, Consolas, Menlo, DejaVu Sans Mono, Liberation Mono">
+
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.ThemeDictionaries>
+        <!-- "Default" is the fallback for every variant; "Light" is NOT. -->
+        <ResourceDictionary x:Key="Default">
+          <SolidColorBrush x:Key="LogViewerWarningForeground" Color="#9D5D00" />
+          <SolidColorBrush x:Key="LogViewerErrorForeground" Color="#C42B1C" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="LogViewerWarningForeground" Color="#FCE100" />
+          <SolidColorBrush x:Key="LogViewerErrorForeground" Color="#FF99A4" />
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
+    </ResourceDictionary>
+  </UserControl.Resources>
+
+  <UserControl.Styles>
+    <Style Selector="ListBoxItem">
+      <Setter Property="Padding" Value="8,1" />
+      <Setter Property="MinHeight" Value="0" />
+    </Style>
+    <Style Selector="TextBlock.warn">
+      <Setter Property="Foreground" Value="{DynamicResource LogViewerWarningForeground}" />
+    </Style>
+    <Style Selector="TextBlock.error">
+      <Setter Property="Foreground" Value="{DynamicResource LogViewerErrorForeground}" />
+    </Style>
+  </UserControl.Styles>
+
+  <DockPanel>
+    <DockPanel x:Name="PART_Toolbar" DockPanel.Dock="Top" LastChildFill="False" Margin="8,4">
+      <TextBlock x:Name="PART_Status" DockPanel.Dock="Left" VerticalAlignment="Center" />
+      <Button x:Name="PART_Resume" DockPanel.Dock="Left" Margin="8,0,0,0" IsVisible="False"
+              AutomationProperties.Name="Jump to newest" />
+      <Button x:Name="PART_Clear" DockPanel.Dock="Right" Content="Clear" Margin="4,0,0,0"
+              AutomationProperties.Name="Clear the log view" />
+      <Button x:Name="PART_Copy" DockPanel.Dock="Right" Content="Copy"
+              AutomationProperties.Name="Copy the selected lines" />
+    </DockPanel>
+
+    <ListBox x:Name="PART_List" SelectionMode="Multiple"
+             ScrollViewer.HorizontalScrollBarVisibility="Auto">
+      <ListBox.ItemTemplate>
+        <DataTemplate x:DataType="core:BGLogRecord">
+          <TextBlock Text="{Binding DisplayText}" TextWrapping="NoWrap"
+                     Classes.warn="{Binding IsWarning}" Classes.error="{Binding IsError}" />
+        </DataTemplate>
+      </ListBox.ItemTemplate>
+      <ListBox.ContextMenu>
+        <ContextMenu>
+          <MenuItem x:Name="PART_MenuCopy" Header="Copy" />
+          <MenuItem x:Name="PART_MenuCopyAll" Header="Copy all" />
+          <MenuItem x:Name="PART_MenuClear" Header="Clear" />
+        </ContextMenu>
+      </ListBox.ContextMenu>
+    </ListBox>
+  </DockPanel>
+</UserControl>

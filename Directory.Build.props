@@ -5,6 +5,7 @@
       - Core, API, Data: net10.0;net8.0;netstandard2.0
       - Cloud: net10.0;net8.0 (uses modern APIs not available in netstandard2.0)
       - Desktop, Desktop.Browser, Desktop.Reporting: net10.0-windows;net8.0-windows
+      - Avalonia: net10.0;net8.0 (cross-platform, no -windows TFM)
     -->
     <!-- <TargetFramework>net10.0</TargetFramework> -->
     <!-- Versioning (managed by CI/CD) -->
