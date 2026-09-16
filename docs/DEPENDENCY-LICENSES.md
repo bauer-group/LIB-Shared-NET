@@ -14,7 +14,7 @@ This document lists the NuGet packages referenced in `Directory.Packages.props` 
 
 | License Type | Count | Compatible with MIT? | Notes |
 |-------------|-------|---------------------|-------|
-| MIT | 26 | ✅ Yes | Permissive, no restrictions |
+| MIT | 27 | ✅ Yes | Permissive, no restrictions |
 | BSD 2-Clause/3-Clause | 14 | ✅ Yes | Permissive |
 | Apache 2.0 | 5 | ✅ Yes | Permissive, requires attribution |
 | MS-PL OR Apache 2.0 | 1 | ✅ Yes | CsvHelper (dual licensed) |
@@ -39,15 +39,15 @@ All dependencies are permissive (MIT, BSD, Apache 2.0) except Stimulsoft, which 
 
 | Package | Version | License | Compatibility |
 |---------|---------|---------|---------------|
-| NLog | 6.1.4 | BSD 3-Clause | ✅ Compatible |
-| NLog.Extensions.Logging | 6.1.4 | BSD 2-Clause | ✅ Compatible |
-| NLog.WindowsEventLog | 6.1.4 | BSD 3-Clause | ✅ Compatible |
+| NLog | 6.2.0 | BSD 3-Clause | ✅ Compatible |
+| NLog.Extensions.Logging | 6.2.0 | BSD 2-Clause | ✅ Compatible |
+| NLog.WindowsEventLog | 6.2.0 | BSD 3-Clause | ✅ Compatible |
 | NLog.Targets.Mail | 6.1.1 | BSD 3-Clause | ✅ Compatible |
-| NLog.Targets.Network | 6.0.4 | BSD 3-Clause | ✅ Compatible |
+| NLog.Targets.Network | 6.1.5 | BSD 3-Clause | ✅ Compatible |
 | NLog.Targets.Trace | 6.0.3 | BSD 3-Clause | ✅ Compatible |
-| NLog.Targets.WebService | 6.1.1 | BSD 3-Clause | ✅ Compatible |
-| Polly | 8.7.0 | BSD 3-Clause | ✅ Compatible |
-| Polly.Extensions | 8.7.0 | BSD 3-Clause | ✅ Compatible |
+| NLog.Targets.WebService | 6.1.4 | BSD 3-Clause | ✅ Compatible |
+| Polly | 8.8.0 | BSD 3-Clause | ✅ Compatible |
+| Polly.Extensions | 8.8.0 | BSD 3-Clause | ✅ Compatible |
 | Sentry | 6.10.0 | MIT | ✅ Compatible |
 | Sentry.NLog | 6.10.0 | MIT | ✅ Compatible |
 
@@ -58,7 +58,7 @@ All dependencies are permissive (MIT, BSD, Apache 2.0) except Stimulsoft, which 
 | LiteDB | 5.0.21 | MIT | ✅ Compatible |
 | NMemory | 3.1.6 | MIT (license file) | ✅ Compatible |
 | sqlite-net-pcl | 1.11.285 | MIT (license file) | ✅ Compatible |
-| System.Runtime.Caching | 10.0.9 | MIT | ✅ Compatible |
+| System.Runtime.Caching | 10.0.12 | MIT | ✅ Compatible |
 
 **Transitive (via sqlite-net-pcl):** SQLitePCLRaw.core 3.0.3 and SQLitePCLRaw.provider.e_sqlite3 3.0.3 (Apache 2.0), SourceGear.sqlite3 3.53.3 (SQLite, public domain).
 
@@ -68,7 +68,7 @@ All dependencies are permissive (MIT, BSD, Apache 2.0) except Stimulsoft, which 
 |---------|---------|---------|---------------|
 | CsvHelper | 33.1.0 | MS-PL OR Apache 2.0 | ✅ Compatible |
 | SharpZipLib | 1.4.2 | MIT | ✅ Compatible |
-| HtmlAgilityPack | 1.12.4 | MIT | ✅ Compatible |
+| HtmlAgilityPack | 1.13.0 | MIT | ✅ Compatible |
 
 ### HTTP / API
 
@@ -80,13 +80,13 @@ All dependencies are permissive (MIT, BSD, Apache 2.0) except Stimulsoft, which 
 
 | Package | Version | License | Compatibility |
 |---------|---------|---------|---------------|
-| CloudinaryDotNet | 1.29.2 | MIT | ✅ Compatible |
+| CloudinaryDotNet | 1.29.3 | MIT | ✅ Compatible |
 
 ### Reactive Extensions
 
 | Package | Version | License | Compatibility |
 |---------|---------|---------|---------------|
-| System.Reactive | 6.1.0 | MIT | ✅ Compatible |
+| System.Reactive | 7.0.0 | MIT | ✅ Compatible |
 
 ### Cross-Platform Desktop (Avalonia)
 
@@ -102,14 +102,15 @@ All dependencies are permissive (MIT, BSD, Apache 2.0) except Stimulsoft, which 
 
 | Package | Version | License | Compatibility |
 |---------|---------|---------|---------------|
-| Microsoft.Xaml.Behaviors.Wpf | 1.1.142 | MIT | ✅ Compatible |
-| Microsoft.Web.WebView2 | 1.0.4022.49 | BSD 3-Clause (license file) | ✅ Compatible |
-| Microsoft.Win32.SystemEvents | 10.0.9 | MIT | ✅ Compatible |
-| System.Configuration.ConfigurationManager | 10.0.9 | MIT | ✅ Compatible |
-| System.Data.Odbc | 10.0.9 | MIT | ✅ Compatible |
-| System.ServiceProcess.ServiceController | 10.0.9 | MIT | ✅ Compatible |
-| System.Text.Encoding.CodePages | 10.0.9 | MIT | ✅ Compatible |
-| System.Collections.Immutable | 10.0.9 | MIT | ✅ Compatible |
+| Microsoft.Xaml.Behaviors.Wpf | 1.1.161 | MIT | ✅ Compatible |
+| Microsoft.Web.WebView2 | 1.0.4191.47 | BSD 3-Clause (license file) | ✅ Compatible |
+| Microsoft.Win32.SystemEvents | 10.0.12 | MIT | ✅ Compatible |
+| System.Configuration.ConfigurationManager | 10.0.12 | MIT | ✅ Compatible |
+| System.Data.Odbc | 10.0.12 | MIT | ✅ Compatible |
+| System.Data.SqlClient | 4.9.1 | MIT | ✅ Compatible |
+| System.ServiceProcess.ServiceController | 10.0.12 | MIT | ✅ Compatible |
+| System.Text.Encoding.CodePages | 10.0.12 | MIT | ✅ Compatible |
+| System.Collections.Immutable | 10.0.12 | MIT | ✅ Compatible |
 
 ### CefSharp (Chromium Embedded Framework)
 
@@ -140,7 +141,7 @@ Stimulsoft is a commercial product. To use the reporting features:
    - See: `.env.example` → `STIMULSOFT_LICENSE_KEY`
 3. Stimulsoft packages are pinned to version 2022.1.2
 
-Stimulsoft 2022.1.2 brings in System.Data.SqlClient 4.7.0 (MIT) transitively, which has known security advisories (NU1902/NU1903).
+Stimulsoft 2022.1.2 resolves System.Data.SqlClient 4.7.0 transitively, which carries known advisories (GHSA-98g6-xh36-x2p7 high, GHSA-8g2p-5pqh-5jmc moderate). Because the Stimulsoft version is license-pinned, `BAUERGROUP.Shared.Desktop.Reporting` references System.Data.SqlClient 4.9.1 directly to lift it to a fixed version.
 
 ### Polyfills (netstandard2.0 / net8.0)
 
@@ -154,10 +155,10 @@ Stimulsoft 2022.1.2 brings in System.Data.SqlClient 4.7.0 (MIT) transitively, wh
 
 | Package | Version | License | Compatibility |
 |---------|---------|---------|---------------|
-| Microsoft.NET.Test.Sdk | 18.6.0 | MIT | ✅ Compatible |
+| Microsoft.NET.Test.Sdk | 18.10.1 | MIT | ✅ Compatible |
 | xunit | 2.9.3 | Apache 2.0 | ✅ Compatible |
 | xunit.v3 | 3.2.2 | Apache 2.0 | ✅ Compatible |
-| xunit.runner.visualstudio | 3.1.5 | Apache 2.0 | ✅ Compatible |
+| xunit.runner.visualstudio | 4.0.0 | Apache 2.0 | ✅ Compatible |
 | coverlet.collector | 10.0.1 | MIT | ✅ Compatible |
 | AwesomeAssertions | 9.6.0 | Apache 2.0 | ✅ Compatible |
 | Moq | 4.20.72 | BSD 3-Clause | ✅ Compatible |
@@ -172,7 +173,7 @@ Stimulsoft 2022.1.2 brings in System.Data.SqlClient 4.7.0 (MIT) transitively, wh
 
 | Package | Version | License | Compatibility |
 |---------|---------|---------|---------------|
-| Microsoft.SourceLink.GitHub | 10.0.300 | MIT | ✅ Compatible (build-time only) |
+| Microsoft.SourceLink.GitHub | 10.0.401 | MIT | ✅ Compatible (build-time only) |
 
 ---
 
