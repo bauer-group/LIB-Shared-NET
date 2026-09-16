@@ -5,6 +5,7 @@ using NLog.Targets;
 
 namespace BAUERGROUP.Shared.Test.Core;
 
+[Collection("BGLogger")]
 public class BGLoggerConfigurationTests
 {
     private static FileTarget GetFileTarget()

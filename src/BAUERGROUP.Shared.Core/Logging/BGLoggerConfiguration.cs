@@ -1,6 +1,7 @@
 ﻿using BAUERGROUP.Shared.Core.Application;
 using BAUERGROUP.Shared.Core.ErrorTracking;
 using NLog;
+using NLog.Common;
 using NLog.Config;
 using NLog.Layouts;
 using NLog.Targets;
@@ -700,6 +701,13 @@ namespace BAUERGROUP.Shared.Core.Logging
 
         public LoggingConfiguration Targets { get; private set; } = null!;
 
+        // The LIVE target and its rule are private fields, not protected properties: BGLiveTarget is
+        // internal, and a protected member of an internal type is CS0053.
+        private readonly object _liveSync = new object();
+        private readonly BGLiveTarget _targetLive = new BGLiveTarget();
+        private LoggingRule? _loggingRuleLive;
+        private LogLevel? _liveRuleLevel;
+
         protected FileTarget TargetFile { get; private set; } = null!;
         protected DebugTarget TargetDebug { get; private set; } = null!;
         protected NetworkTarget TargetNetwork { get; private set; } = null!;
@@ -736,6 +744,158 @@ namespace BAUERGROUP.Shared.Core.Logging
         public void Reconfigure()
         {
             LogManager.ReconfigExistingLoggers();
+        }
+
+        /// <summary>
+        /// Registers an in-process callback that receives every log event at <paramref name="minimumLevel"/> or above.
+        /// No UDP, no <c>System.Diagnostics.Trace</c>, no other configuration change.
+        /// </summary>
+        /// <remarks>
+        /// The NLog target "LIVE" and its rule are part of <see cref="Targets"/> only while at least one sink is
+        /// registered (reference counted), so there is no cost while no viewer is open. The rule level is the least
+        /// restrictive level over all registered sinks and is recomputed on every registration change.
+        /// <para>The callback runs synchronously on the logging thread inside NLog's per-target lock. It MUST return
+        /// immediately, MUST NOT block, MUST NOT marshal synchronously to a UI thread (disposing the last registration
+        /// waits for an in-flight call — a sink that waits on the UI thread while the UI thread disposes deadlocks),
+        /// and MUST NOT log (events logged from a sink are dropped by a re-entrancy guard). Exceptions thrown by a sink
+        /// are caught per sink and reported to NLog's <c>InternalLogger</c>; other sinks and the caller are unaffected.
+        /// Pass <c>BGLogViewBuffer.Post</c> — it satisfies all of this.</para>
+        /// <para>A callback also MUST NOT register a live sink and MUST NOT dispose a live-sink registration — not even
+        /// its own, so no one-shot sink that unsubscribes itself. Both take the live lock while the callback already
+        /// holds NLog's per-target lock and would deadlock against any other thread doing the reverse; both therefore
+        /// throw <see cref="InvalidOperationException"/> when called from a callback. Record what the callback saw and
+        /// dispose the registration from the thread that owns it.</para>
+        /// <para>Only effective while BGLogger owns <c>LogManager.Configuration</c>. An application that assigns
+        /// <c>LogManager.Configuration</c> itself closes every BGLogger target, including this one.</para>
+        /// <para>While registered, every log call at or above the effective level builds and formats a LogEventInfo.
+        /// Raise <paramref name="minimumLevel"/> in chatty processes.</para>
+        /// <para>Registrations are serialised against each other, but <see cref="BGLoggerConfiguration"/> as a whole is
+        /// not thread-safe: the target toggles (<see cref="Memory"/>, <see cref="Network"/>, …) mutate
+        /// <c>Targets.LoggingRules</c> without any lock. Do not register or remove a sink while another thread flips a
+        /// target on or off.</para>
+        /// </remarks>
+        /// <param name="sink">Callback invoked for every captured log event.</param>
+        /// <param name="minimumLevel">Lowest level this sink receives; null means <c>LogLevel.Trace</c>.</param>
+        /// <returns>Disposing removes the sink. Dispose is idempotent and thread-safe.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="sink"/> is null.</exception>
+        /// <exception cref="InvalidOperationException">Called from inside a live-sink callback.</exception>
+        public IDisposable AddLiveSink(Action<BGLogRecord> sink, LogLevel? minimumLevel = null)
+        {
+            if (sink == null)
+                throw new ArgumentNullException(nameof(sink));
+
+            if (BGLiveTarget.IsInWrite)
+                throw new InvalidOperationException(
+                    "A live sink must not be registered from inside a live-sink callback. " +
+                    "Register it from the thread that owns the registration.");
+
+            lock (_liveSync)
+            {
+                var registration = new BGLiveSink(this, sink, minimumLevel ?? LogLevel.Trace);
+                _targetLive.AddSink(registration);
+
+                try
+                {
+                    SyncLiveConfiguration();
+                }
+                catch
+                {
+                    // Roll the NLog configuration back as well: SyncLiveConfiguration may already have added
+                    // the target and the rule before failing, and leaving those behind would keep every log
+                    // call formatting a LogEventInfo for a target with no sinks.
+                    _targetLive.RemoveSink(registration);
+                    SyncLiveConfigurationSafely();
+                    throw;
+                }
+
+                return registration;
+            }
+        }
+
+        /// <summary>
+        /// Number of registered live sinks. 0 means the "LIVE" target is not in the configuration.
+        /// Deliberately not derived from <c>Targets.AllTargets</c>, which goes stale when an application
+        /// replaces <c>LogManager.Configuration</c>.
+        /// </summary>
+        public Int32 LiveSinkCount
+        {
+            get { return _targetLive.SinkCount; }
+        }
+
+        internal void RemoveLiveSink(BGLiveSink registration)
+        {
+            lock (_liveSync)
+            {
+                _targetLive.RemoveSink(registration);
+
+                // Removal happens through IDisposable.Dispose, which viewers call from window-closing and
+                // shutdown handlers: a failing NLog reconfiguration must not escape from there.
+                SyncLiveConfigurationSafely();
+            }
+        }
+
+        // Called only under _liveSync. Reports instead of throwing, so the caller's state stays consistent.
+        private void SyncLiveConfigurationSafely()
+        {
+            try
+            {
+                SyncLiveConfiguration();
+            }
+            catch (Exception ex)
+            {
+                InternalLogger.Warn(ex, "BGLoggerConfiguration: the live-sink configuration could not be synchronised.");
+            }
+        }
+
+        // Called only under _liveSync; the only place that touches NLog for the LIVE target.
+        // Ordering is load-bearing: the rule is always removed BEFORE the target, otherwise
+        // LoggingConfiguration.RemoveTarget permanently empties rule.Targets. The statement-scoped
+        // lock on LoggingRules is only a lock-ordering marker - it is released before RemoveTarget takes
+        // the target's own SyncRoot, because nesting the two would invert the lock order. It grants no
+        // mutual exclusion: the target toggles of this class mutate the same list without any lock.
+        private void SyncLiveConfiguration()
+        {
+            var level = _targetLive.EffectiveMinimumLevel;
+            var current = _loggingRuleLive;
+
+            if (level == null)
+            {
+                if (current != null)
+                {
+                    lock (Targets.LoggingRules) { Targets.LoggingRules.Remove(current); }
+                    _loggingRuleLive = null;
+                    _liveRuleLevel = null;
+                }
+
+                Targets.RemoveTarget("LIVE");
+                Reconfigure();
+                return;
+            }
+
+            if (current == null)
+            {
+                Targets.AddTarget("LIVE", _targetLive);
+                var rule = new LoggingRule("*", level, _targetLive);
+                lock (Targets.LoggingRules) { Targets.LoggingRules.Add(rule); }
+                _loggingRuleLive = rule;
+                _liveRuleLevel = level;
+                Reconfigure();
+                return;
+            }
+
+            if (_liveRuleLevel == null || _liveRuleLevel.Ordinal != level.Ordinal)
+            {
+                var replacement = new LoggingRule("*", level, _targetLive);
+                lock (Targets.LoggingRules)
+                {
+                    Targets.LoggingRules.Remove(current);
+                    Targets.LoggingRules.Add(replacement);
+                }
+
+                _loggingRuleLive = replacement;
+                _liveRuleLevel = level;
+                Reconfigure();
+            }
         }
 
         protected virtual void InitializeCustomTargets()
