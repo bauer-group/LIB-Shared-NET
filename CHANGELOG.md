@@ -4,6 +4,14 @@ All notable changes to this project are documented here. This file is maintained
 automatically by [semantic-release](https://github.com/semantic-release/semantic-release)
 on every release to `main`.
 
+## [4.0.2](https://github.com/bauer-group/LIB-Shared-NET/compare/v4.0.1...v4.0.2) (2026-09-16)
+
+### 🐛 Bug Fixes
+
+* **browser:** replaced missing icon resources with vector geometry ([2f32af6](https://github.com/bauer-group/LIB-Shared-NET/commit/2f32af667ba8bfa9f4d3da03f9ac932e2f310633)), closes [#139](https://github.com/bauer-group/LIB-Shared-NET/issues/139)
+* **logging:** fixed the doubled colon in the shared layout ([4c417c6](https://github.com/bauer-group/LIB-Shared-NET/commit/4c417c622834d49edb7d42728039944216d83ba9))
+* **logging:** made the log target toggles idempotent ([75918b4](https://github.com/bauer-group/LIB-Shared-NET/commit/75918b4fcd47cb984d53836cd9391fea103195ac)), closes [#138](https://github.com/bauer-group/LIB-Shared-NET/issues/138)
+
 ## [4.0.1](https://github.com/bauer-group/LIB-Shared-NET/compare/v4.0.0...v4.0.1) (2026-09-16)
 
 ### 🐛 Bug Fixes
