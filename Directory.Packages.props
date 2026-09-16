@@ -30,7 +30,7 @@
     <!-- HTTP / API -->
     <PackageVersion Include="RestSharp" Version="114.0.0" />
     <!-- Cloud Services -->
-    <PackageVersion Include="CloudinaryDotNet" Version="1.29.2" />
+    <PackageVersion Include="CloudinaryDotNet" Version="1.29.3" />
     <!-- Reactive Extensions -->
     <PackageVersion Include="System.Reactive" Version="6.1.0" />
     <!-- Windows Desktop (WPF/WinForms) -->
