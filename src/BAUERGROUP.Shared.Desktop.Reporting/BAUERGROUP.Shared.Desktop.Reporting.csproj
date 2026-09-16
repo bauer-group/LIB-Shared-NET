@@ -11,6 +11,9 @@
     <!-- Stimulsoft Version bleibt wegen Lizenz auf 2022.1.2 -->
     <PackageReference Include="Stimulsoft.Dashboards.Win" />
     <PackageReference Include="Stimulsoft.Reports.Wpf" />
+    <!-- Stimulsoft 2022.1.2 resolves System.Data.SqlClient 4.7.0, which has known advisories
+         (GHSA-98g6-xh36-x2p7 high, GHSA-8g2p-5pqh-5jmc moderate); this lifts it to a fixed version -->
+    <PackageReference Include="System.Data.SqlClient" />
   </ItemGroup>
 
   <ItemGroup>
