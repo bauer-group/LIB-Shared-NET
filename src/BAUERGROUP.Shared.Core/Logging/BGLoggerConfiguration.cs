@@ -113,22 +113,55 @@ namespace BAUERGROUP.Shared.Core.Logging
             }
         }
 
+        /// <summary>
+        /// Enables or disables one target together with its <see cref="LoggingRule"/>. Backs every boolean
+        /// target property of this class.
+        /// </summary>
+        /// <remarks>
+        /// Idempotent in both directions and self-healing. The guard compares both halves of the state - the
+        /// registration of <paramref name="target"/>, which is exactly what the boolean getters report, and the
+        /// presence of <paramref name="rule"/> - so setting a property to the value it already has does nothing
+        /// at all and does not reconfigure NLog either.
+        /// <para>Never adding blindly is what makes the shared rule objects reusable: <c>Targets.LoggingRules</c>
+        /// and <c>rule.Targets</c> are plain lists that happily take duplicates. Adding the same rule twice and
+        /// removing it once used to leave a copy behind that <see cref="LoggingConfiguration.RemoveTarget(String)"/>
+        /// then emptied for good, and re-enabling the property re-added that rule without any target.</para>
+        /// <para>The two halves can also drift apart from outside, because <see cref="Targets"/> is public: an
+        /// application calling <c>RemoveTarget</c> itself empties the rule but leaves it in the list. Enabling
+        /// then repairs the rule instead of appending it a second time, disabling drops the emptied rule.</para>
+        /// <para>The order on disable is load-bearing and mirrors <c>SyncLiveConfiguration</c>: the rule is always
+        /// removed BEFORE the target, because <c>RemoveTarget</c> strips the target out of every rule still in the
+        /// list, which is what would empty the rule for good.</para>
+        /// </remarks>
+        private void ApplyTarget(Boolean enable, String name, Target target, LoggingRule rule)
+        {
+            if (enable == Targets.AllTargets.Contains(target) && enable == Targets.LoggingRules.Contains(rule))
+                return;
+
+            if (enable)
+            {
+                if (!rule.Targets.Contains(target))
+                    rule.WriteTo(target);
+
+                Targets.AddTarget(name, target);
+
+                if (!Targets.LoggingRules.Contains(rule))
+                    Targets.LoggingRules.Add(rule);
+            }
+            else
+            {
+                Targets.LoggingRules.Remove(rule);
+                Targets.RemoveTarget(name);
+            }
+
+            Reconfigure();
+        }
+
         public Boolean Debug
         {
             set
             {
-                if (value == true)
-                {
-                    Targets.AddTarget("DEBUG", TargetDebug);
-                    Targets.LoggingRules.Add(LoggingRuleDebug);
-                }
-                else
-                {
-                    Targets.LoggingRules.Remove(LoggingRuleDebug);
-                    Targets.RemoveTarget("DEBUG");
-                }
-
-                Reconfigure();
+                ApplyTarget(value, "DEBUG", TargetDebug, LoggingRuleDebug);
             }
 
             get
@@ -141,18 +174,7 @@ namespace BAUERGROUP.Shared.Core.Logging
         {
             set
             {
-                if (value == true)
-                {
-                    Targets.AddTarget("NETWORK", TargetNetwork);
-                    Targets.LoggingRules.Add(LoggingRuleNetwork);
-                }
-                else
-                {
-                    Targets.LoggingRules.Remove(LoggingRuleNetwork);
-                    Targets.RemoveTarget("NETWORK");
-                }
-
-                Reconfigure();
+                ApplyTarget(value, "NETWORK", TargetNetwork, LoggingRuleNetwork);
             }
 
             get
@@ -165,18 +187,7 @@ namespace BAUERGROUP.Shared.Core.Logging
         {
             set
             {
-                if (value == true)
-                {
-                    Targets.AddTarget("MAIL", TargetMail);
-                    Targets.LoggingRules.Add(LoggingRuleMail);
-                }
-                else
-                {
-                    Targets.LoggingRules.Remove(LoggingRuleMail);
-                    Targets.RemoveTarget("MAIL");
-                }
-
-                Reconfigure();
+                ApplyTarget(value, "MAIL", TargetMail, LoggingRuleMail);
             }
 
             get
@@ -189,18 +200,7 @@ namespace BAUERGROUP.Shared.Core.Logging
         {
             set
             {
-                if (value == true)
-                {
-                    Targets.AddTarget("FILE", TargetFile);
-                    Targets.LoggingRules.Add(LoggingRuleFile);
-                }
-                else
-                {
-                    Targets.LoggingRules.Remove(LoggingRuleFile);
-                    Targets.RemoveTarget("FILE");
-                }
-
-                Reconfigure();
+                ApplyTarget(value, "FILE", TargetFile, LoggingRuleFile);
             }
 
             get
@@ -213,18 +213,7 @@ namespace BAUERGROUP.Shared.Core.Logging
         {
             set
             {
-                if (value == true)
-                {
-                    Targets.AddTarget("NLOGVIEWER", TargetLogViewer);
-                    Targets.LoggingRules.Add(LoggingRuleLogViewer);
-                }
-                else
-                {
-                    Targets.LoggingRules.Remove(LoggingRuleLogViewer);
-                    Targets.RemoveTarget("NLOGVIEWER");
-                }
-
-                Reconfigure();
+                ApplyTarget(value, "NLOGVIEWER", TargetLogViewer, LoggingRuleLogViewer);
             }
 
             get
@@ -237,18 +226,7 @@ namespace BAUERGROUP.Shared.Core.Logging
         {
             set
             {
-                if (value == true)
-                {
-                    Targets.AddTarget("CONSOLE", TargetConsole);
-                    Targets.LoggingRules.Add(LoggingRuleConsole);
-                }
-                else
-                {
-                    Targets.LoggingRules.Remove(LoggingRuleConsole);
-                    Targets.RemoveTarget("CONSOLE");
-                }
-
-                Reconfigure();
+                ApplyTarget(value, "CONSOLE", TargetConsole, LoggingRuleConsole);
             }
 
             get
@@ -261,18 +239,7 @@ namespace BAUERGROUP.Shared.Core.Logging
         {
             set
             {
-                if (value == true)
-                {
-                    Targets.AddTarget("CONSOLECOLORED", TargetConsoleColored);
-                    Targets.LoggingRules.Add(LoggingRuleConsoleColored);
-                }
-                else
-                {
-                    Targets.LoggingRules.Remove(LoggingRuleConsoleColored);
-                    Targets.RemoveTarget("CONSOLECOLORED");
-                }
-
-                Reconfigure();
+                ApplyTarget(value, "CONSOLECOLORED", TargetConsoleColored, LoggingRuleConsoleColored);
             }
 
             get
@@ -285,18 +252,7 @@ namespace BAUERGROUP.Shared.Core.Logging
         {
             set
             {
-                if (value == true)
-                {
-                    Targets.AddTarget("MEMORY", TargetMemory);
-                    Targets.LoggingRules.Add(LoggingRuleMemory);
-                }
-                else
-                {
-                    Targets.LoggingRules.Remove(LoggingRuleMemory);
-                    Targets.RemoveTarget("MEMORY");
-                }
-
-                Reconfigure();
+                ApplyTarget(value, "MEMORY", TargetMemory, LoggingRuleMemory);
             }
 
             get
@@ -310,18 +266,7 @@ namespace BAUERGROUP.Shared.Core.Logging
         {
             set
             {
-                if (value == true)
-                {
-                    Targets.AddTarget("EVENTLOG", TargetEventlog);
-                    Targets.LoggingRules.Add(LoggingRuleEventlog);
-                }
-                else
-                {
-                    Targets.LoggingRules.Remove(LoggingRuleEventlog);
-                    Targets.RemoveTarget("EVENTLOG");
-                }
-
-                Reconfigure();
+                ApplyTarget(value, "EVENTLOG", TargetEventlog, LoggingRuleEventlog);
             }
 
             get
@@ -335,18 +280,7 @@ namespace BAUERGROUP.Shared.Core.Logging
         {
             set
             {
-                if (value == true)
-                {
-                    Targets.AddTarget("TRACE", TargetTrace);
-                    Targets.LoggingRules.Add(LoggingRuleTrace);
-                }
-                else
-                {
-                    Targets.LoggingRules.Remove(LoggingRuleTrace);
-                    Targets.RemoveTarget("TRACE");
-                }
-
-                Reconfigure();
+                ApplyTarget(value, "TRACE", TargetTrace, LoggingRuleTrace);
             }
 
             get
@@ -359,18 +293,7 @@ namespace BAUERGROUP.Shared.Core.Logging
         {
             set
             {
-                if (value == true)
-                {
-                    Targets.AddTarget("LOGRECEIVERSERVICE", TargetLogReceiverService);
-                    Targets.LoggingRules.Add(LoggingRuleLogReceiverService);
-                }
-                else
-                {
-                    Targets.LoggingRules.Remove(LoggingRuleLogReceiverService);
-                    Targets.RemoveTarget("LOGRECEIVERSERVICE");
-                }
-
-                Reconfigure();
+                ApplyTarget(value, "LOGRECEIVERSERVICE", TargetLogReceiverService, LoggingRuleLogReceiverService);
             }
 
             get
@@ -383,18 +306,7 @@ namespace BAUERGROUP.Shared.Core.Logging
         {
             set
             {
-                if (value == true)
-                {
-                    Targets.AddTarget("DEBUGGER", TargetDebugger);
-                    Targets.LoggingRules.Add(LoggingRuleDebugger);
-                }
-                else
-                {
-                    Targets.LoggingRules.Remove(LoggingRuleDebugger);
-                    Targets.RemoveTarget("DEBUGGER");
-                }
-
-                Reconfigure();
+                ApplyTarget(value, "DEBUGGER", TargetDebugger, LoggingRuleDebugger);
             }
 
             get
@@ -411,6 +323,9 @@ namespace BAUERGROUP.Shared.Core.Logging
         {
             set
             {
+                // Validation and the Sentry options run on every enable, including a redundant one: the
+                // caller may have changed the DSN or a level since, and a missing DSN must keep throwing
+                // whether or not the target happens to be registered already.
                 if (value == true)
                 {
                     if (string.IsNullOrEmpty(SentryDsn))
@@ -421,17 +336,9 @@ namespace BAUERGROUP.Shared.Core.Logging
                     TargetErrorTracking.Options.MinimumEventLevel = SentryMinimumEventLevel;
                     TargetErrorTracking.Options.MinimumBreadcrumbLevel = SentryMinimumBreadcrumbLevel;
                     ErrorTrackingCache.Apply(TargetErrorTracking.Options, SentryCacheDirectoryPath, SentryMaxCacheItems, SentryInitCacheFlushTimeout);
-
-                    Targets.AddTarget("ERRORTRACKING", TargetErrorTracking);
-                    Targets.LoggingRules.Add(LoggingRuleErrorTracking);
-                }
-                else
-                {
-                    Targets.LoggingRules.Remove(LoggingRuleErrorTracking);
-                    Targets.RemoveTarget("ERRORTRACKING");
                 }
 
-                Reconfigure();
+                ApplyTarget(value, "ERRORTRACKING", TargetErrorTracking, LoggingRuleErrorTracking);
             }
 
             get
