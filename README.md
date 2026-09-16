@@ -341,7 +341,11 @@ using IDisposable liveSink = BGLogger.Configuration.AddLiveSink(record => Show(r
 int openSinks = BGLogger.Configuration.LiveSinkCount;
 ```
 
-The live sink is what the log viewers are built on — see [Live Log Viewer (Avalonia)](#live-log-viewer-avalonia) above, and `WPFToolbox.LogMessageReceiverWindow()` in `BAUERGROUP.Shared.Desktop` for WPF. It replaces the UDP round trip the old viewer used: `BGLoggerNetworkListener` and `TextBoxTraceListener` are `[Obsolete]` and will be removed in the next major version.
+The live sink is what the log viewers are built on — see [Live Log Viewer (Avalonia)](#live-log-viewer-avalonia) above, and `WPFToolbox.LogMessageReceiverWindow()` in `BAUERGROUP.Shared.Desktop` for WPF. It replaces the UDP round trip the old viewer used: `BGLoggerNetworkListener` and `TextBoxTraceListener` are `[Obsolete]` and will be removed in a future major version.
+
+The target name `LIVE` is reserved for this sink — NLog replaces a same-named target silently, so do not add your own target called `LIVE` to `BGLogger.Configuration.Targets`.
+
+**What changed for the WPF viewer in 4.0.0:** it no longer opens a UDP socket on port 9898 and no longer switches `BGLogger.Configuration.Network` on (which the previous version never switched off again). It shows the process's own events with a local `HH:mm:ss.fff LEVEL message` layout instead of the UTC file layout, keeps a rolling 5 000 lines instead of wiping the whole view past 1 000, and adds level colours, selection with copy, and a Follow toggle.
 
 ### Sentry Integration
 

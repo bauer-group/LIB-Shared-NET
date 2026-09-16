@@ -766,7 +766,9 @@ namespace BAUERGROUP.Shared.Core.Logging
         /// throw <see cref="InvalidOperationException"/> when called from a callback. Record what the callback saw and
         /// dispose the registration from the thread that owns it.</para>
         /// <para>Only effective while BGLogger owns <c>LogManager.Configuration</c>. An application that assigns
-        /// <c>LogManager.Configuration</c> itself closes every BGLogger target, including this one.</para>
+        /// <c>LogManager.Configuration</c> itself closes every BGLogger target, including this one. The target name
+        /// "LIVE" is reserved: NLog replaces a same-named target silently, so an application must not add its own
+        /// target called "LIVE" to <see cref="Targets"/>.</para>
         /// <para>While registered, every log call at or above the effective level builds and formats a LogEventInfo.
         /// Raise <paramref name="minimumLevel"/> in chatty processes.</para>
         /// <para>Registrations are serialised against each other, but <see cref="BGLoggerConfiguration"/> as a whole is

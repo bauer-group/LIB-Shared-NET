@@ -82,9 +82,10 @@ jobs:
       # Test csproj only - never the slnx: that would run the net*-windows test assembly
       # on Linux and build CefSharp and Stimulsoft for nothing.
       project-path: "tests/BAUERGROUP.Shared.Avalonia.Test/BAUERGROUP.Shared.Avalonia.Test.csproj"
-      # 10.0.x SDK only: ubuntu-24.04 ships the 8.0 runtime, so the net8.0 test
-      # assembly runs without a second setup-dotnet.
-      dotnet-version: "10.0.x"
+      # Both SDKs: the test project multi-targets net8.0 and net10.0, and setup-dotnet
+      # puts its own installation first on PATH, so the runner's preinstalled 8.0
+      # runtime must not be relied on (comma-separated = a second setup-dotnet step).
+      dotnet-version: "8.0.x,10.0.x"
       runs-on: "ubuntu-latest"
       run-tests: true
       collect-coverage: false

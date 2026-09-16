@@ -8,7 +8,7 @@
 
 ## Summary
 
-This document lists the NuGet packages referenced in `Directory.Packages.props` and their licenses. Versions and licenses were read from each package's nuspec on nuget.org (SPDX expression, or the license file embedded in the package where no expression is declared).
+This document lists the NuGet packages referenced in `Directory.Packages.props` and their licenses. Versions and licenses were read from each package's nuspec on nuget.org (SPDX expression, or the license file embedded in the package where no expression is declared). The counts below cover those direct references; transitive packages are noted per section.
 
 ### License Compatibility Overview
 
@@ -164,7 +164,7 @@ Stimulsoft 2022.1.2 brings in System.Data.SqlClient 4.7.0 (MIT) transitively, wh
 | Avalonia.Headless.XUnit | 12.1.2 | MIT | ✅ Compatible |
 | Avalonia.Themes.Fluent | 12.1.2 | MIT | ✅ Compatible |
 
-**Transitive (via Avalonia.Headless.XUnit):** Avalonia.Headless 12.1.2 (MIT) and xunit.v3.extensibility.core 3.2.2 (Apache 2.0).
+**Transitive (test-only):** Avalonia.Headless.XUnit pulls in Avalonia.Headless, Avalonia.Fonts.Inter, Avalonia.HarfBuzz and HarfBuzzSharp with its native asset packages (all MIT), plus the xunit.v3.* packages, xunit.analyzers (Apache 2.0) and Microsoft.Testing.Platform with its extensions (MIT). All permissive, none shipped in a package.
 
 `xunit` (2.9.3) and `xunit.v3` are separate package ids and coexist: `tests/BAUERGROUP.Shared.Test` uses xunit 2, `tests/BAUERGROUP.Shared.Avalonia.Test` uses xunit.v3, which `Avalonia.Headless.XUnit` requires. xunit.v3 is pinned to 3.x — see `.github/dependabot.yml`.
 
