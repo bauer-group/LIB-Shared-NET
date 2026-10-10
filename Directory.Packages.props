@@ -39,7 +39,8 @@
     <PackageVersion Include="Microsoft.Win32.SystemEvents" Version="10.0.12" />
     <PackageVersion Include="System.Configuration.ConfigurationManager" Version="10.0.12" />
     <PackageVersion Include="System.Data.Odbc" Version="10.0.12" />
-    <!-- Direct reference only to lift the vulnerable 4.7.0 that Stimulsoft 2022.1.2 pulls in -->
+    <!-- Direct reference only to lift the vulnerable 4.7.0 that Stimulsoft 2022.1.2 pulls in
+         (Desktop.Reporting, plus the test project so its restore never fetches 4.7.0) -->
     <PackageVersion Include="System.Data.SqlClient" Version="4.9.1" />
 
     <PackageVersion Include="System.ServiceProcess.ServiceController" Version="10.0.12" />

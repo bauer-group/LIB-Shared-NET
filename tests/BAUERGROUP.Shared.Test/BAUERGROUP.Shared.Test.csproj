@@ -13,6 +13,13 @@
     <PackageReference Include="Moq" />
     <PackageReference Include="xunit" />
     <PackageReference Include="xunit.runner.visualstudio" />
+    <!-- Not used by the tests. NuGet only skips a transitive dependency without fetching it
+         when the project being restored references that package directly; a direct reference
+         in a ProjectReference (Desktop.Reporting) does not count. Without this line, restoring
+         this project downloads the vulnerable System.Data.SqlClient 4.7.0 that Stimulsoft
+         2022.1.2 requests into ./Packages, where the dependency graph reports it
+         (GHSA-98g6-xh36-x2p7, GHSA-8g2p-5pqh-5jmc), although 4.9.1 wins resolution. -->
+    <PackageReference Include="System.Data.SqlClient" />
   </ItemGroup>
 
   <ItemGroup>
