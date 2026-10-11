@@ -51,9 +51,9 @@
     <PackageVersion Include="CefSharp.OffScreen.NETCore" Version="152.0.60" />
     <PackageVersion Include="CefSharp.Wpf.NETCore" Version="152.0.60" />
     <!-- Cross-platform Desktop (Avalonia) -->
-    <PackageVersion Include="Avalonia" Version="12.1.2" />
-    <PackageVersion Include="Avalonia.Themes.Fluent" Version="12.1.2" />
-    <PackageVersion Include="Avalonia.Headless.XUnit" Version="12.1.2" />
+    <PackageVersion Include="Avalonia" Version="12.1.4" />
+    <PackageVersion Include="Avalonia.Themes.Fluent" Version="12.1.4" />
+    <PackageVersion Include="Avalonia.Headless.XUnit" Version="12.1.4" />
     <!-- Reporting (Stimulsoft) - Version bleibt wegen Lizenz! -->
     <PackageVersion Include="Stimulsoft.Dashboards.Win" Version="2022.1.2" />
     <PackageVersion Include="Stimulsoft.Reports.Wpf" Version="2022.1.2" />
