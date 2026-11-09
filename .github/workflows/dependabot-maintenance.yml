@@ -17,10 +17,13 @@
 #   merged automatically (guard of the reusable workflow) - merge by hand.
 #
 # Release: the NuGet commit prefix is "deps(dotnet)", which the
-# semantic-release config maps to a PATCH release. The merge itself is made
-# with GITHUB_TOKEN and starts no push workflow, so the release follows with
-# the next push to main that is not made by that token, or a manual run of
-# dotnet-release.yml.
+# semantic-release config maps to a PATCH release. A merge made with the
+# GITHUB_TOKEN starts no push workflow, so after the merge this workflow
+# dispatches dotnet-release.yml on main and waits for it (release-workflow).
+# That run builds, tests and packs the merged commit again and only then:
+# 1. Creates a semantic release (deps(dotnet) -> PATCH)
+# 2. Publishes the packages to NuGet.org and GitHub Packages
+# A release run that does not succeed turns this job red.
 # =============================================================================
 
 name: 🤖 Dependabot Maintenance
@@ -37,7 +40,7 @@ permissions:
   pull-requests: write  # approve, read the PR
   checks: read          # check runs and suites
   statuses: read        # commit statuses
-  actions: read         # workflow runs
+  actions: write        # dispatch the release; read workflow runs
 
 jobs:
   maintenance:
@@ -47,6 +50,10 @@ jobs:
       # The PR CI that builds and tests the update; a PR it did not run for
       # stays open as "not tested".
       required-workflows: .github/workflows/dotnet-release.yml
+      # After a merge - and only then - dispatch the release on main and
+      # wait for it: it rebuilds the merged commit before it releases it,
+      # and a failed release run fails this job.
+      release-workflow: .github/workflows/dotnet-release.yml
       merge-method: 'squash'
       auto-approve: true
       # Patch updates only. Below 1.0.0 a minor update (0.3.1 -> 0.4.0) and a

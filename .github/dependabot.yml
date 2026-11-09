@@ -4,6 +4,15 @@
 # Automatic dependency updates for:
 # - NuGet packages (weekly)
 # - GitHub Actions (weekly)
+#
+# The commit prefix decides whether a merged update is released. This
+# library's own releaseRules (.github/config/release/semantic-release.json)
+# map deps to a PATCH release, so every merged update publishes packages:
+#   nuget           -> deps(dotnet)  PATCH release, packages published to
+#                                    NuGet.org and GitHub Packages
+#   github-actions  -> chore(ci)     no release, never auto-merged
+# dependabot-maintenance.yml merges with the GITHUB_TOKEN, which starts no
+# push workflow, and therefore dispatches dotnet-release.yml itself.
 # =============================================================================
 
 version: 2

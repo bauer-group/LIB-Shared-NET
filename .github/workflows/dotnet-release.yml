@@ -3,7 +3,7 @@
 # =============================================================================
 # Complete CI/CD workflow for the shared platform libraries using reusable
 # workflows from bauer-group/automation-templates:
-# - PR validation (build & test)
+# - Build, test and package validation on every event (gates the release)
 # - Semantic versioning (conventional commits)
 # - Automatic release creation
 # - NuGet publishing to NuGet.org and GitHub Packages
@@ -102,17 +102,65 @@ jobs:
     secrets: inherit
 
   # ============================================
-  # Semantic Release (only on main branch push)
+  # Package Validation (every event, never pushed)
   # ============================================
-  release:
-    name: 📦 Create Release
+  # Packs the libraries from this commit on every event - part of the PR CI
+  # that dependabot-maintenance.yml waits for, and on a push or dispatch a
+  # gate of the release: a package that does not pack skips the release and
+  # the publish job, instead of leaving a version without its packages.
+  package-validate:
+    name: 📋 Validate Package
     needs: [validate, validate-linux]
     if: |
-      (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
-      github.event_name == 'workflow_dispatch'
+      needs.validate.result == 'success' &&
+      needs.validate-linux.result == 'success'
+    uses: bauer-group/automation-templates/.github/workflows/dotnet-publish-library.yml@main
+    with:
+      project-path: "BAUERGROUP.Shared.slnx"
+      dotnet-version: "10.0.x"
+
+      # Preview version suffix - this package is never pushed
+      version-suffix: "pr"
+
+      # Build on Linux (default)
+      # runs-on: "ubuntu-latest" (default)
+
+      # Tests already ran in validate job
+      run-tests: false
+
+      # Build and validate package
+      create-package: true
+      include-symbols: true
+
+      # Don't publish
+      push-to-nuget: false
+      push-to-github: false
+    secrets: inherit
+
+  # ============================================
+  # Semantic Release (main branch push or dispatch)
+  # ============================================
+  # Gated on this run's Windows and Linux build & test and the package
+  # validation - all three run on every event, including the release that
+  # dependabot-maintenance.yml dispatches after a Dependabot merge.
+  release:
+    name: 📦 Create Release
+    needs: [validate, validate-linux, package-validate]
+    if: |
+      ((github.event_name == 'push' && github.ref == 'refs/heads/main') ||
+       github.event_name == 'workflow_dispatch') &&
+      needs.validate.result == 'success' &&
+      needs.validate-linux.result == 'success' &&
+      needs.package-validate.result == 'success'
     uses: bauer-group/automation-templates/.github/workflows/modules-semantic-release.yml@main
     with:
       target-branch: "main"
+      # Release the commit this run built and tested - the publish job below
+      # builds it too. Unpinned, the release would take the tip of main: a
+      # push that landed meanwhile would be tagged untested and be missing
+      # from the packages. Pinned, nothing is released once main has moved
+      # on, and the run for the newer main releases both.
+      ref: ${{ github.sha }}
       force-release: ${{ inputs.force-release || false }}
       extra-plugins: "semantic-release-dotnet"
     secrets: inherit
@@ -123,6 +171,8 @@ jobs:
   publish:
     name: 📤 Publish to NuGet & GitHub
     needs: release
+    # Only a run that created a release publishes - never a PR, a branch
+    # dispatch or a run that released nothing.
     if: needs.release.outputs.release-created == 'true'
     uses: bauer-group/automation-templates/.github/workflows/dotnet-publish-library.yml@main
     with:
@@ -150,34 +200,4 @@ jobs:
       include-symbols: true
       include-source: true
       deterministic-build: true
-    secrets: inherit
-
-  # ============================================
-  # PR Package Validation (only on pull requests)
-  # ============================================
-  pr-validate:
-    name: 📋 Validate Package (PR)
-    needs: [validate, validate-linux]
-    if: github.event_name == 'pull_request'
-    uses: bauer-group/automation-templates/.github/workflows/dotnet-publish-library.yml@main
-    with:
-      project-path: "BAUERGROUP.Shared.slnx"
-      dotnet-version: "10.0.x"
-
-      # Preview version for PR
-      version-suffix: "pr"
-
-      # Build on Linux (default)
-      # runs-on: "ubuntu-latest" (default)
-
-      # Tests already ran in validate job
-      run-tests: false
-
-      # Build and validate package
-      create-package: true
-      include-symbols: true
-
-      # Don't publish
-      push-to-nuget: false
-      push-to-github: false
     secrets: inherit
