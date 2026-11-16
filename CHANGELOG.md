@@ -4,6 +4,12 @@ All notable changes to this project are documented here. This file is maintained
 automatically by [semantic-release](https://github.com/semantic-release/semantic-release)
 on every release to `main`.
 
+## [4.0.3](https://github.com/bauer-group/LIB-Shared-NET/compare/v4.0.2...v4.0.3) (2026-11-16)
+
+### 🔧 Maintenance
+
+* **ci:** removed issue AI summary workflow ([37f98bb](https://github.com/bauer-group/LIB-Shared-NET/commit/37f98bbec2470ebe428aa47fabf1aeda45f5af80)), references [bauer-group/automation-templates#105](https://github.com/bauer-group/automation-templates/issues/105)
+
 ## [4.0.2](https://github.com/bauer-group/LIB-Shared-NET/compare/v4.0.1...v4.0.2) (2026-09-16)
 
 ### 🐛 Bug Fixes
