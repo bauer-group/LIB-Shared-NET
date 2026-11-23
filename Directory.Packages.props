@@ -12,7 +12,7 @@
     <!-- NLog 6.0 separate target packages -->
     <PackageVersion Include="NLog.Targets.Mail" Version="6.2.2" />
     <PackageVersion Include="NLog.Targets.Network" Version="6.2.2" />
-    <PackageVersion Include="NLog.Targets.Trace" Version="6.0.3" />
+    <PackageVersion Include="NLog.Targets.Trace" Version="6.2.2" />
     <PackageVersion Include="NLog.Targets.WebService" Version="6.1.4" />
     <PackageVersion Include="Polly" Version="8.8.0" />
     <PackageVersion Include="Polly.Extensions" Version="8.8.0" />
