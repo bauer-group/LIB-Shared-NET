@@ -45,6 +45,12 @@ updates:
           - "AwesomeAssertions*"
           - "coverlet*"
           - "Moq*"
+      # CefSharp.Wpf.NETCore and CefSharp.OffScreen.NETCore depend on exactly their own
+      # version of CefSharp.Common.NETCore (=). Updated one at a time, restore fails with
+      # NU1605 (downgrade of CefSharp.Common.NETCore). They must move together.
+      cefsharp:
+        patterns:
+          - "CefSharp.*"
     # License-pinned packages: do not update.
     # Stimulsoft 2022.1.2 is the version covered by our license — see
     # Directory.Packages.props ("Version bleibt wegen Lizenz!").
