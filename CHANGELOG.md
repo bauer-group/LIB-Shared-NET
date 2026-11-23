@@ -4,6 +4,8 @@ All notable changes to this project are documented here. This file is maintained
 automatically by [semantic-release](https://github.com/semantic-release/semantic-release)
 on every release to `main`.
 
+## [4.0.6](https://github.com/bauer-group/LIB-Shared-NET/compare/v4.0.5...v4.0.6) (2026-11-23)
+
 ## [4.0.5](https://github.com/bauer-group/LIB-Shared-NET/compare/v4.0.4...v4.0.5) (2026-11-23)
 
 ## [4.0.4](https://github.com/bauer-group/LIB-Shared-NET/compare/v4.0.3...v4.0.4) (2026-11-22)
