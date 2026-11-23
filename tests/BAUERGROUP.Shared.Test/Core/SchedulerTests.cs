@@ -4,6 +4,12 @@ namespace BAUERGROUP.Shared.Test.Core;
 
 public class SchedulerTests : IDisposable
 {
+    // Upper bound for the polls below, not a delay: they return as soon as the condition holds.
+    // The first execution runs on the thread pool, which a Windows runner busy with four test
+    // hosts at once has left unserviced for more than 5 s (StartAsync_ExecutesEnabledJobs:
+    // "did not reach ExecutionCount >= 1 within 5000ms (actual: 0)").
+    private static readonly TimeSpan PollTimeout = TimeSpan.FromSeconds(30);
+
     private readonly Scheduler _scheduler;
 
     public SchedulerTests()
@@ -101,7 +107,7 @@ public class SchedulerTests : IDisposable
         _scheduler.RegisterJob(job);
 
         await _scheduler.StartAsync();
-        await WaitForExecutionsAsync(job, atLeast: 1, timeout: TimeSpan.FromSeconds(5));
+        await WaitForExecutionsAsync(job, atLeast: 1, timeout: PollTimeout);
         await _scheduler.StopAsync();
 
         job.ExecutionCount.Should().BeGreaterThan(0);
@@ -142,11 +148,11 @@ public class SchedulerTests : IDisposable
         _scheduler.RegisterJob(job);
 
         await _scheduler.StartAsync();
-        await WaitForExecutionsAsync(job, atLeast: 1, timeout: TimeSpan.FromSeconds(5));
+        await WaitForExecutionsAsync(job, atLeast: 1, timeout: PollTimeout);
         var countBeforeRestart = job.ExecutionCount;
 
         await _scheduler.RestartAsync();
-        await WaitForExecutionsAsync(job, atLeast: countBeforeRestart + 1, timeout: TimeSpan.FromSeconds(5));
+        await WaitForExecutionsAsync(job, atLeast: countBeforeRestart + 1, timeout: PollTimeout);
         await _scheduler.StopAsync();
 
         job.ExecutionCount.Should().BeGreaterThan(1);
@@ -183,7 +189,7 @@ public class SchedulerTests : IDisposable
         job.LastExecution.Should().BeNull();
 
         await _scheduler.StartAsync();
-        await WaitUntilAsync(() => job.LastExecution != null, TimeSpan.FromSeconds(5), "LastExecution set");
+        await WaitUntilAsync(() => job.LastExecution != null, PollTimeout, "LastExecution set");
         await _scheduler.StopAsync();
 
         job.LastExecution.Should().NotBeNull();
@@ -196,7 +202,7 @@ public class SchedulerTests : IDisposable
         _scheduler.RegisterJob(job);
 
         await _scheduler.StartAsync();
-        await WaitUntilAsync(() => job.SuccessfulExecution, TimeSpan.FromSeconds(5), "SuccessfulExecution set");
+        await WaitUntilAsync(() => job.SuccessfulExecution, PollTimeout, "SuccessfulExecution set");
         await _scheduler.StopAsync();
 
         job.SuccessfulExecution.Should().BeTrue();
