@@ -85,6 +85,12 @@ updates:
         update-types: ["version-update:semver-major"]
       - dependency-name: "System.Text.Json"
         update-types: ["version-update:semver-major"]
+      # CsvHelper 34 is an API rewrite (CsvConfiguration/TrimOptions removed, records
+      # need [CsvRecord] source generation); BAUERGROUP.Shared.Core's CSV reader and
+      # writer do not compile against it (#197). Porting changes the public API and
+      # needs a major release of this library - remove this rule with that port.
+      - dependency-name: "CsvHelper"
+        update-types: ["version-update:semver-major"]
 
   # GitHub Actions
   - package-ecosystem: "github-actions"
